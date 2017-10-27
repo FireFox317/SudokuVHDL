@@ -5,4 +5,5 @@ simulation
 *.bak
 *.qsf
 *.qpf
+*.qws
 c5_pin_model_dump.txt
