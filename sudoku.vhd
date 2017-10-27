@@ -12,7 +12,10 @@ ENTITY sudoku IS
 
 			spi_data_send: OUT std_logic_vector(11 downto 0);
 			spi_write_enable: OUT std_logic;
-			spi_data_request: IN std_logic
+			spi_data_request: IN std_logic;
+
+            SW: IN std_logic_vector(7 downto 0);
+            KEY: IN std_logic
     );		
 END ENTITY sudoku;
 
@@ -28,7 +31,8 @@ ARCHITECTURE bhv of sudoku IS
             address_data: OUT integer range 0 to 9;
               
             spi_write_enable: OUT std_logic;
-            spi_data_request: IN std_logic
+            spi_data_request: IN std_logic;
+            SW: IN std_logic_vector(7 downto 0)
         );   
     END COMPONENT send;
 
@@ -42,7 +46,9 @@ ARCHITECTURE bhv of sudoku IS
             data_store_address: OUT integer range 0 to 9;
                 
             spi_data_valid : IN std_logic;
-            memory_we : OUT std_logic
+            memory_we : OUT std_logic;
+
+            SW: IN std_logic_vector(7 downto 0)
         );            
     END COMPONENT receive;
 
@@ -51,7 +57,9 @@ ARCHITECTURE bhv of sudoku IS
             clk: IN std_logic;
             reset: IN std_logic;
 
-            control: OUT std_logic_vector(2 downto 0)
+            control: OUT std_logic_vector(2 downto 0);
+
+            KEY: IN std_logic
         );     
     END COMPONENT controller;
 
@@ -84,7 +92,8 @@ BEGIN
         spi_write_enable => spi_write_enable,
         control => control_wire,
         address_data => address_data_wire,
-        spi_data_request => spi_data_request
+        spi_data_request => spi_data_request,
+        SW => SW
         );
 
     d_r: receive PORT MAP(
@@ -93,14 +102,16 @@ BEGIN
         spi_data_valid => spi_data_valid,
         control => control_wire,
         data_store_address => data_store_address_wire,
-        memory_we => memory_we_wire
+        memory_we => memory_we_wire,
+        SW => SW
         );
 
     cont : controller PORT MAP(
         clk => clk,
         reset => reset,
 
-        control => control_wire
+        control => control_wire,
+        KEY => KEY
         );
 
     mem: memory PORT MAP(

@@ -12,7 +12,10 @@ ENTITY receive IS
        	data_store_address: OUT integer range 0 to 9;
 			
 		spi_data_valid : IN std_logic;
-       	memory_we : OUT std_logic
+       	memory_we : OUT std_logic;
+       	
+        SW: IN std_logic_vector(7 downto 0)
+
     );		
 END ENTITY receive;
 

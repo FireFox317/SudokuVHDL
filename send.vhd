@@ -12,7 +12,10 @@ ENTITY send IS
         address_data: OUT integer range 0 to 9;
 		  
 		spi_write_enable: OUT std_logic;
-        spi_data_request: IN std_logic
+        spi_data_request: IN std_logic;
+
+        SW: IN std_logic_vector(7 downto 0)
+
     );		
 END ENTITY send;
 

@@ -9,7 +9,10 @@ ENTITY top_level IS
         sclk : IN std_logic;
         ss_n : IN std_logic;
         mosi : IN std_logic;
-        miso : OUT std_logic
+        miso : OUT std_logic;
+
+        SW: IN std_logic_vector(7 downto 0);
+        KEY: IN std_logic
     );		
 END ENTITY top_level;
 
@@ -25,7 +28,10 @@ ARCHITECTURE bhv of top_level IS
 
             spi_data_send: OUT std_logic_vector(11 downto 0);
             spi_write_enable: OUT std_logic;
-            spi_data_request: IN std_logic
+            spi_data_request: IN std_logic;
+
+            SW: IN std_logic_vector(7 downto 0);
+            KEY: IN std_logic
         );
     END COMPONENT sudoku;
 
@@ -76,7 +82,10 @@ BEGIN
         spi_data_valid => spi_data_valid_wire,
 
         spi_write_enable => spi_write_enable_wire,
-        spi_data_request => spi_data_request_wire
+        spi_data_request => spi_data_request_wire,
+
+        SW => SW,
+        KEY => KEY
         );
 
     sp_s: spi_slave GENERIC MAP(N => 12) PORT MAP(

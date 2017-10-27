@@ -6,7 +6,9 @@ ENTITY controller IS
   		clk: IN std_logic;
         reset: IN std_logic;
 
-        control: OUT std_logic_vector(2 downto 0)
+        control: OUT std_logic_vector(2 downto 0);
+
+        SW: IN std_logic_vector(3 downto 0)
     );		
 END ENTITY controller;
 
