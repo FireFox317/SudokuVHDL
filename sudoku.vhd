@@ -123,8 +123,6 @@ SIGNAL mem_read_address_wire: integer range 0 to 15;
 
 SIGNAL mem_output_data_wire: std_logic_vector(11 downto 0);
 
-
-
  
 BEGIN
 
@@ -170,7 +168,6 @@ BEGIN
         we => mem_write_enable_wire,
         q => mem_output_data_wire
         );
-
 
 mem_read_address_wire <= show_mem_read_address_wire WHEN control_wire = "100" ELSE send_mem_read_address_wire;
 
