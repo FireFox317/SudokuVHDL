@@ -1,5 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
 ENTITY top_level IS
   PORT (
@@ -11,15 +12,19 @@ ENTITY top_level IS
         mosi : IN std_logic;
         miso : OUT std_logic;
 
-        SW: IN std_logic_vector(7 downto 0);
-        KEY: IN std_logic
+        sw_address: IN unsigned(3 downto 0);
+
+        btn_state: IN std_logic;
+        led_state: OUT std_logic_vector(2 downto 0);
+
+        HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY top_level;
 
 ARCHITECTURE bhv of top_level IS
 
     COMPONENT sudoku IS
-        PORT (
+      PORT (
             clk: IN std_logic;
             reset: IN std_logic;
 
@@ -30,9 +35,13 @@ ARCHITECTURE bhv of top_level IS
             spi_write_enable: OUT std_logic;
             spi_data_request: IN std_logic;
 
-            SW: IN std_logic_vector(7 downto 0);
-            KEY: IN std_logic
-        );
+            sw_address: IN unsigned(3 downto 0);
+
+            btn_state: IN std_logic;
+            led_state: OUT std_logic_vector(2 downto 0);
+
+            HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
+        );      
     END COMPONENT sudoku;
 
     COMPONENT spi_slave is
@@ -84,8 +93,12 @@ BEGIN
         spi_write_enable => spi_write_enable_wire,
         spi_data_request => spi_data_request_wire,
 
-        SW => SW,
-        KEY => KEY
+        sw_address => sw_address,
+        btn_state => btn_state,
+        led_state => led_state,
+        HEX0 => HEX0,
+        HEX1 => HEX1,
+        HEX2 => HEX2
         );
 
     sp_s: spi_slave GENERIC MAP(N => 12) PORT MAP(
