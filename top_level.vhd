@@ -13,14 +13,17 @@ ENTITY top_level IS
         miso : OUT std_logic;
 
         btn_state: IN std_logic;
-        led_state: OUT std_logic_vector(2 downto 0)
+        led_state: OUT std_logic_vector(2 downto 0);
+
+        sw_location: IN unsigned(7 downto 0);
+        HEX0: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY top_level;
 
 ARCHITECTURE bhv of top_level IS
 
     COMPONENT sudoku IS
-      PORT (
+  PORT (
             clk: IN std_logic;
             reset: IN std_logic;
 
@@ -32,8 +35,11 @@ ARCHITECTURE bhv of top_level IS
             spi_data_request: IN std_logic;
 
             btn_state: IN std_logic;
-            led_state: OUT std_logic_vector(2 downto 0)
-        );      
+            led_state: OUT std_logic_vector(2 downto 0);
+
+            sw_location: IN unsigned(7 downto 0);
+            HEX0: OUT std_logic_vector(6 downto 0)
+    );         
     END COMPONENT sudoku;
 
     COMPONENT spi_slave is
@@ -85,7 +91,9 @@ BEGIN
         spi_data_request => spi_data_request_wire,
 
         btn_state => btn_state,
-        led_state => led_state
+        led_state => led_state,
+        sw_location => sw_location,
+        HEX0 => HEX0
         );
 
     sp_s: spi_slave GENERIC MAP(N => 12) PORT MAP(
