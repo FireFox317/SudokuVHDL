@@ -24,21 +24,7 @@ END ENTITY sudoku;
 
 ARCHITECTURE bhv of sudoku IS
 
-    COMPONENT send IS
-        PORT (
-            clk: IN std_logic;
-            reset: IN std_logic;
 
-            control : IN std_logic_vector(2 downto 0);
-
-            mem_read_address: OUT integer range 0 to 255;
-            mem_data_out: IN std_logic_vector(3 downto 0);
-              
-            spi_write_enable: OUT std_logic;
-            spi_data_send: OUT std_logic_vector(7 downto 0);
-            spi_data_request: IN std_logic
-        );            
-    END COMPONENT send;
 
     COMPONENT receive IS
           PORT (
@@ -116,16 +102,6 @@ SIGNAL mem_write_enable_wire: std_logic;
  
 BEGIN
 
-    d_s: send PORT MAP(
-        clk => clk,
-        reset => reset,
-        control => control_wire,
-        mem_read_address => send_mem_read_address_wire,
-        mem_data_out => mem_data_out_wire,
-        spi_write_enable => spi_write_enable,
-        spi_data_send => spi_data_send,
-        spi_data_request => spi_data_request
-        );
 
     d_r: receive PORT MAP(
         clk => clk,
