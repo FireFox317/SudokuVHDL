@@ -16,7 +16,7 @@ END ENTITY controller;
 ARCHITECTURE bhv of controller IS
 	SIGNAL edge: std_logic;
 	SIGNAL btn_state_1: std_logic;
-	TYPE states IS (receiving, sending, showing);
+	TYPE states IS (receiving, sending, showing, solving);
 	SIGNAL state: states := receiving;
 
 BEGIN
@@ -32,7 +32,8 @@ BEGIN
 			CASE state IS
 				WHEN receiving => state <= sending;
 				WHEN sending => state <= showing;
-				WHEN showing => state <= receiving;
+				WHEN showing => state <= solving;
+				WHEN solving => state <= receiving;
 			END CASE;
 		END IF;
 
@@ -40,6 +41,7 @@ BEGIN
 			WHEN receiving => control <= "001"; led_state <= "001";
 			WHEN sending => control <= "010"; led_state <= "010";
 			WHEN showing => control <= "100"; led_state <= "100";
+			WHEN solving => control <= "011"; led_state <= "011";
 		END CASE;
 	END IF;
 
