@@ -23,8 +23,22 @@ ENTITY sudoku IS
 END ENTITY sudoku;
 
 ARCHITECTURE bhv of sudoku IS
+    
+    COMPONENT send IS
+      PORT (
+        clk: IN std_logic;
+        reset: IN std_logic;
 
+        control : IN std_logic_vector(2 downto 0);
 
+        mem_read_address: OUT integer range 0 to 255;
+        mem_data_out: IN std_logic_vector(3 downto 0);
+          
+        spi_write_enable: OUT std_logic;
+        spi_data_send: OUT std_logic_vector(7 downto 0);
+        spi_data_request: IN std_logic
+    ); 
+    END COMPONENT send;
 
     COMPONENT receive IS
           PORT (
@@ -82,34 +96,88 @@ ARCHITECTURE bhv of sudoku IS
         );      
     END COMPONENT show;
 
+    COMPONENT solving IS
+    PORT (
+        reset           : IN std_logic;
+        clk             : IN std_logic;
+
+        control: IN std_logic_vector(2 downto 0);
+
+        mem_read_address: OUT integer range 0 to 255;
+        mem_data_out: IN std_logic_vector(3 downto 0);
+
+        mem_store_address: OUT integer range 0 to 255;
+        mem_write_enable: OUT std_logic;
+        mem_data_in : OUT std_logic_vector(3 downto 0)
+
+        );
+END COMPONENT solving;
+
 SIGNAL control_wire: std_logic_vector(2 downto 0);
 
 SIGNAL mem_data_in_wire: std_logic_vector(3 downto 0);
+SIGNAL receive_mem_data_in_wire: std_logic_vector(3 downto 0);
+SIGNAL solve_mem_data_in_wire: std_logic_vector(3 downto 0);
 
 SIGNAL mem_data_out_wire: std_logic_vector(3 downto 0);
+
+
 
 SIGNAL mem_read_address_wire: integer range 0 to 255;
 SIGNAL send_mem_read_address_wire: integer range 0 to 255;
 SIGNAL show_mem_read_address_wire: integer range 0 to 255;
+SIGNAL solve_mem_read_address_wire: integer range 0 to 255;
 
 
 SIGNAL mem_store_address_wire: integer range 0 to 255;
+SIGNAL solve_mem_store_address_wire: integer range 0 to 255;
+SIGNAL receive_mem_store_address_wire: integer range 0 to 255;
+
 
 SIGNAL mem_write_enable_wire: std_logic;
+SIGNAL solve_mem_write_enable_wire: std_logic;
+SIGNAL receive_mem_write_enable_wire: std_logic;
+
 
 
 
  
 BEGIN
 
+    solv: solving PORT MAP(
+        clk => clk,
+        reset => reset,
+        control => control_wire,
+        mem_read_address => solve_mem_read_address_wire,
+        mem_data_out => mem_data_out_wire,
+
+        mem_store_address => solve_mem_store_address_wire,
+        mem_write_enable => solve_mem_write_enable_wire,
+        mem_data_in => solve_mem_data_in_wire
+
+        );   
+
+
+
+    s: send PORT MAP(
+        clk => clk,
+        reset => reset,
+        control => control_wire,
+        mem_read_address => send_mem_read_address_wire,
+        mem_data_out => mem_data_out_wire,
+        spi_write_enable => spi_write_enable,
+        spi_data_send => spi_data_send,
+        spi_data_request => spi_data_request
+        );
+
 
     d_r: receive PORT MAP(
         clk => clk,
         reset => reset,
         control => control_wire,
-        mem_store_address => mem_store_address_wire,
-        mem_write_enable => mem_write_enable_wire,
-        mem_data_in => mem_data_in_wire,
+        mem_store_address => receive_mem_store_address_wire,
+        mem_write_enable => receive_mem_write_enable_wire,
+        mem_data_in => receive_mem_data_in_wire,
         spi_data_valid => spi_data_valid,
         spi_data_receive => spi_data_receive
         );
@@ -141,6 +209,18 @@ BEGIN
         HEX0 => HEX0
         );
 
-mem_read_address_wire <= show_mem_read_address_wire WHEN control_wire = "100" ELSE send_mem_read_address_wire;
+mem_read_address_wire <= show_mem_read_address_wire WHEN control_wire = "100" 
+                        ELSE solve_mem_read_address_wire WHEN control_wire = "011"  
+                        ELSE send_mem_read_address_wire;
 
+mem_data_in_wire <= solve_mem_data_in_wire WHEN control_wire = "011" 
+                    ELSE receive_mem_data_in_wire;
+
+
+
+mem_store_address_wire <= solve_mem_store_address_wire WHEN control_wire = "011"  
+                        ELSE receive_mem_store_address_wire;
+
+mem_write_enable_wire <= solve_mem_write_enable_wire WHEN control_wire = "011" 
+                            ELSE receive_mem_write_enable_wire;
 END bhv;
