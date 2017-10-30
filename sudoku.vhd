@@ -7,10 +7,10 @@ ENTITY sudoku IS
 			clk: IN std_logic;
 			reset: IN std_logic;
 
-			spi_data_receive: IN std_logic_vector(11 downto 0);
+			spi_data_receive: IN std_logic_vector(7 downto 0);
 			spi_data_valid: IN std_logic;
 
-			spi_data_send: OUT std_logic_vector(11 downto 0);
+			spi_data_send: OUT std_logic_vector(7 downto 0);
 			spi_write_enable: OUT std_logic;
 			spi_data_request: IN std_logic;
 
@@ -35,7 +35,7 @@ ARCHITECTURE bhv of sudoku IS
             mem_data_out: IN std_logic_vector(3 downto 0);
               
             spi_write_enable: OUT std_logic;
-            spi_data_send: OUT std_logic_vector(11 downto 0);
+            spi_data_send: OUT std_logic_vector(7 downto 0);
             spi_data_request: IN std_logic
         );            
     END COMPONENT send;
@@ -52,7 +52,7 @@ ARCHITECTURE bhv of sudoku IS
                 mem_data_in : OUT std_logic_vector(3 downto 0); 
                     
                 spi_data_valid : IN std_logic;
-                spi_data_receive: IN std_logic_vector(11 downto 0)     
+                spi_data_receive: IN std_logic_vector(7 downto 0)     
             );           
     END COMPONENT receive;
 

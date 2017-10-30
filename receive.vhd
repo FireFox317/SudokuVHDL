@@ -14,11 +14,13 @@ ENTITY receive IS
        	mem_data_in : OUT std_logic_vector(3 downto 0); 
 			
 		spi_data_valid : IN std_logic;
-		spi_data_receive: IN std_logic_vector(11 downto 0)	
+		spi_data_receive: IN std_logic_vector(7 downto 0)	
     );		
 END ENTITY receive;
 
 ARCHITECTURE bhv of receive IS
+
+	SIGNAL count: std_logic := '0';
 
 BEGIN
 
@@ -33,9 +35,13 @@ BEGIN
 				-- receiving
 				mem_write_enable <= '1';
 				IF spi_data_valid = '1' THEN
-					-- write to memory
-					mem_store_address <= to_integer(unsigned(spi_data_receive(7 downto 0)));
-					mem_data_in <= spi_data_receive(11 downto 8);
+					IF count = '0' THEN
+						mem_store_address <= to_integer(unsigned(spi_data_receive));
+						count <= '1';
+					ELSE
+						mem_data_in <= spi_data_receive(3 downto 0);
+					END IF;
+	
 				END IF;
 			ELSE
 				mem_write_enable <= '0';

@@ -27,10 +27,10 @@ ARCHITECTURE bhv of top_level IS
             clk: IN std_logic;
             reset: IN std_logic;
 
-            spi_data_receive: IN std_logic_vector(11 downto 0);
+            spi_data_receive: IN std_logic_vector(7 downto 0);
             spi_data_valid: IN std_logic;
 
-            spi_data_send: OUT std_logic_vector(11 downto 0);
+            spi_data_send: OUT std_logic_vector(7 downto 0);
             spi_write_enable: OUT std_logic;
             spi_data_request: IN std_logic;
 
@@ -69,8 +69,8 @@ ARCHITECTURE bhv of top_level IS
         );                      
     end COMPONENT spi_slave;
 
-    SIGNAL spi_data_receive_wire: std_logic_vector(11 downto 0);
-    SIGNAL spi_data_send_wire: std_logic_vector(11 downto 0);
+    SIGNAL spi_data_receive_wire: std_logic_vector(7 downto 0);
+    SIGNAL spi_data_send_wire: std_logic_vector(7 downto 0);
 
     SIGNAL spi_data_valid_wire: std_logic;
     SIGNAL spi_write_enable_wire: std_logic;
@@ -96,7 +96,7 @@ BEGIN
         HEX0 => HEX0
         );
 
-    sp_s: spi_slave GENERIC MAP(N => 12) PORT MAP(
+    sp_s: spi_slave GENERIC MAP(N => 8) PORT MAP(
             clk_i => clk,
             spi_ssel_i => ss_n,
             spi_sck_i => sclk,
