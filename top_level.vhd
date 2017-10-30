@@ -12,12 +12,8 @@ ENTITY top_level IS
         mosi : IN std_logic;
         miso : OUT std_logic;
 
-        sw_address: IN unsigned(3 downto 0);
-
         btn_state: IN std_logic;
-        led_state: OUT std_logic_vector(2 downto 0);
-
-        HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
+        led_state: OUT std_logic_vector(2 downto 0)
     );		
 END ENTITY top_level;
 
@@ -35,12 +31,8 @@ ARCHITECTURE bhv of top_level IS
             spi_write_enable: OUT std_logic;
             spi_data_request: IN std_logic;
 
-            sw_address: IN unsigned(3 downto 0);
-
             btn_state: IN std_logic;
-            led_state: OUT std_logic_vector(2 downto 0);
-
-            HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
+            led_state: OUT std_logic_vector(2 downto 0)
         );      
     END COMPONENT sudoku;
 
@@ -78,7 +70,6 @@ ARCHITECTURE bhv of top_level IS
     SIGNAL spi_write_enable_wire: std_logic;
     SIGNAL spi_data_request_wire: std_logic;
 
-
 BEGIN
 
     sud: sudoku PORT MAP(
@@ -93,12 +84,8 @@ BEGIN
         spi_write_enable => spi_write_enable_wire,
         spi_data_request => spi_data_request_wire,
 
-        sw_address => sw_address,
         btn_state => btn_state,
-        led_state => led_state,
-        HEX0 => HEX0,
-        HEX1 => HEX1,
-        HEX2 => HEX2
+        led_state => led_state
         );
 
     sp_s: spi_slave GENERIC MAP(N => 12) PORT MAP(
@@ -114,9 +101,6 @@ BEGIN
             do_valid_o => spi_data_valid_wire,
             do_o => spi_data_receive_wire
         );
-
-
-
 
 
 
