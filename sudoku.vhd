@@ -97,21 +97,49 @@ ARCHITECTURE bhv of sudoku IS
     END COMPONENT show;
 
     COMPONENT solving IS
-    PORT (
-        reset           : IN std_logic;
-        clk             : IN std_logic;
+        PORT (
+            reset           : IN std_logic;
+            clk             : IN std_logic;
 
-        control: IN std_logic_vector(2 downto 0);
+            control: IN std_logic_vector(2 downto 0);
 
-        mem_read_address: OUT integer range 0 to 255;
-        mem_data_out: IN std_logic_vector(3 downto 0);
+            mem_read_address: OUT integer range 0 to 255;
+            mem_data_out: IN std_logic_vector(3 downto 0);
 
-        mem_store_address: OUT integer range 0 to 255;
-        mem_write_enable: OUT std_logic;
-        mem_data_in : OUT std_logic_vector(3 downto 0)
+            mem_store_address: OUT integer range 0 to 255;
+            mem_write_enable: OUT std_logic;
+            mem_data_in : OUT std_logic_vector(3 downto 0)
 
-        );
-END COMPONENT solving;
+            );
+    END COMPONENT solving;
+
+    COMPONENT multiplexer IS
+      PORT (
+            control : IN std_logic_vector(2 downto 0);
+
+            mem_read_address: OUT integer range 0 to 255;
+            show_mem_read_address: IN integer range 0 to 255;
+            send_mem_read_address: IN integer range 0 to 255;
+            solve_mem_read_address: IN integer range 0 to 255;
+
+            mem_store_address: OUT integer range 0 to 255;
+            solve_mem_store_address: IN integer range 0 to 255;
+            receive_mem_store_address: IN integer range 0 to 255;
+
+            mem_write_enable: OUT std_logic;
+            solve_mem_write_enable: IN std_logic;
+            receive_mem_write_enable: IN std_logic;
+
+            mem_data_in: OUT std_logic_vector(3 downto 0);
+            receive_mem_data_in: IN std_logic_vector(3 downto 0);
+            solve_mem_data_in: IN std_logic_vector(3 downto 0)
+
+            );
+
+    END COMPONENT multiplexer;
+
+
+
 
 SIGNAL control_wire: std_logic_vector(2 downto 0);
 
@@ -211,18 +239,28 @@ BEGIN
         HEX2 => HEX2
         );
 
-mem_read_address_wire <= show_mem_read_address_wire WHEN control_wire = "100" 
-                        ELSE solve_mem_read_address_wire WHEN control_wire = "011"  
-                        ELSE send_mem_read_address_wire;
+    mul: multiplexer PORT MAP(
+        control => control_wire,
 
-mem_data_in_wire <= solve_mem_data_in_wire WHEN control_wire = "011" 
-                    ELSE receive_mem_data_in_wire;
+        mem_read_address => mem_read_address_wire,
+        show_mem_read_address =>  show_mem_read_address_wire,
+        send_mem_read_address =>  send_mem_read_address_wire,
+        solve_mem_read_address =>  solve_mem_read_address_wire,
+
+        mem_store_address => mem_store_address_wire,
+        solve_mem_store_address => solve_mem_store_address_wire,
+        receive_mem_store_address => receive_mem_store_address_wire,
+
+        mem_write_enable => mem_write_enable_wire,
+        solve_mem_write_enable => solve_mem_write_enable_wire,
+        receive_mem_write_enable => receive_mem_write_enable_wire,
+
+        mem_data_in => mem_data_in_wire,
+        receive_mem_data_in =>  receive_mem_data_in_wire,
+        solve_mem_data_in =>  solve_mem_data_in_wire
 
 
+        );
 
-mem_store_address_wire <= solve_mem_store_address_wire WHEN control_wire = "011"  
-                        ELSE receive_mem_store_address_wire;
 
-mem_write_enable_wire <= solve_mem_write_enable_wire WHEN control_wire = "011" 
-                            ELSE receive_mem_write_enable_wire;
 END bhv;
