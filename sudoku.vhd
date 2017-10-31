@@ -33,18 +33,18 @@ ARCHITECTURE bhv of sudoku IS
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
 
-            mem_we : OUT std_logic;
+            mem_we : OUT std_logic
 
-            solve_read_request : IN std_logic;
-            solve_read_feedback : OUT std_logic;
-            solve_write_request : IN std_logic;
-            solve_write_feedback : OUT std_logic;
-            send_read_request : IN std_logic;
-            send_read_feedback : OUT std_logic;
-            receive_write_request : IN std_logic;
-            receive_write_feedback : OUT std_logic;
-            show_read_request : IN std_logic;
-            show_read_feedback : OUT std_logic
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         );     
     END COMPONENT controller;
 
@@ -68,8 +68,8 @@ ARCHITECTURE bhv of sudoku IS
 
             mem_read_address: INOUT unsigned(7 downto 0);
             mem_data_out: IN std_logic_vector(3 downto 0);
-            mem_read_request : OUT std_logic;
-            mem_read_feedback : IN std_logic;
+            
+            
               
             spi_write_enable: OUT std_logic;
             spi_data_send: OUT std_logic_vector(7 downto 0);
@@ -86,8 +86,8 @@ ARCHITECTURE bhv of sudoku IS
 
                 mem_write_address: INOUT unsigned(7 downto 0);
                 mem_data_in : INOUT std_logic_vector(3 downto 0);
-                mem_write_request : OUT std_logic;
-                mem_write_feedback : IN std_logic; 
+                
+                
                     
                 spi_data_valid : IN std_logic;
                 spi_data_receive: IN std_logic_vector(7 downto 0)     
@@ -104,12 +104,12 @@ ARCHITECTURE bhv of sudoku IS
         mem_read_address: INOUT unsigned(7 downto 0);
         mem_data_out: IN std_logic_vector(3 downto 0);
         mem_write_address: INOUT unsigned(7 downto 0);
-        mem_data_in : INOUT std_logic_vector(3 downto 0);
+        mem_data_in : INOUT std_logic_vector(3 downto 0)
 
-        mem_write_request : OUT std_logic;
-        mem_write_feedback : IN std_logic;
-        mem_read_request : OUT std_logic;
-        mem_read_feedback : IN std_logic
+        
+        
+        
+        
 
         );
     END COMPONENT solving;
@@ -123,8 +123,8 @@ ARCHITECTURE bhv of sudoku IS
 
             mem_read_address: INOUT unsigned(7 downto 0);
             mem_data_out: IN std_logic_vector(3 downto 0);
-            mem_read_request : OUT std_logic;
-            mem_read_feedback : IN std_logic;
+            
+            
 
             sw_location: IN unsigned(7 downto 0);
 
@@ -141,16 +141,16 @@ SIGNAL q_bus : std_logic_vector(3 downto 0);
 
 SIGNAL we_wire: std_logic;
 
-SIGNAL solve_read_request_wire : std_logic;
-SIGNAL solve_read_feedback_wire : std_logic;
-SIGNAL solve_write_request_wire : std_logic;
-SIGNAL solve_write_feedback_wire : std_logic;
-SIGNAL send_read_request_wire : std_logic;
-SIGNAL send_read_feedback_wire : std_logic;
-SIGNAL receive_write_request_wire : std_logic;
-SIGNAL receive_write_feedback_wire : std_logic;
-SIGNAL show_read_request_wire : std_logic;
-SIGNAL show_read_feedback_wire : std_logic;
+
+
+
+
+
+
+
+
+
+
 
 
  
@@ -162,18 +162,18 @@ BEGIN
         btn_state => btn_state,
         led_state => led_state,
 
-        mem_we => we_wire,
+        mem_we => we_wire
 
-        solve_read_request => solve_read_request_wire,
-        solve_read_feedback => solve_read_feedback_wire,
-        solve_write_request => solve_write_request_wire,
-        solve_write_feedback => solve_write_feedback_wire,
-        send_read_request => send_read_request_wire,
-        send_read_feedback => send_read_feedback_wire,
-        receive_write_request => receive_write_request_wire, 
-        receive_write_feedback => receive_write_feedback_wire,
-        show_read_request => show_read_request_wire,
-        show_read_feedback => show_read_feedback_wire
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         );
 
     mem: memory PORT MAP(
@@ -194,12 +194,12 @@ BEGIN
         mem_read_address => read_address_bus,
         mem_data_out => q_bus,
         mem_write_address => write_address_bus,
-        mem_data_in => data_bus,
+        mem_data_in => data_bus
 
-        mem_write_request => solve_write_request_wire,
-        mem_write_feedback => solve_write_feedback_wire,
-        mem_read_request => solve_read_request_wire,
-        mem_read_feedback => solve_write_feedback_wire
+        
+        
+        
+        
         );   
 
 
@@ -212,8 +212,8 @@ BEGIN
 
         mem_read_address => read_address_bus,
         mem_data_out => q_bus,
-        mem_read_request => send_read_request_wire,
-        mem_read_feedback => send_read_feedback_wire,
+        
+        
 
         spi_write_enable => spi_write_enable,
         spi_data_send => spi_data_send,
@@ -229,8 +229,8 @@ BEGIN
 
         mem_write_address => write_address_bus,
         mem_data_in => data_bus,
-        mem_write_request => receive_write_request_wire,
-        mem_write_feedback => receive_write_feedback_wire,
+        
+        
 
         spi_data_valid => spi_data_valid,
         spi_data_receive => spi_data_receive
@@ -242,10 +242,14 @@ BEGIN
         control => control_wire,
         mem_read_address => read_address_bus,
         mem_data_out => q_bus,
-        mem_read_request => show_read_request_wire,
-        mem_read_feedback => show_read_feedback_wire,
+        
+        
         sw_location => sw_location,
         HEX0 => HEX0
         );
+
+
+
+
 
 END bhv;

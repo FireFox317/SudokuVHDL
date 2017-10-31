@@ -12,43 +12,29 @@ ENTITY solving IS
 		mem_read_address: INOUT unsigned(7 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 		mem_write_address: INOUT unsigned(7 downto 0);
-		mem_data_in : INOUT std_logic_vector(3 downto 0);
+		mem_data_in : INOUT std_logic_vector(3 downto 0)
 
-		mem_write_request : OUT std_logic;
-       	mem_write_feedback : IN std_logic;
-       	mem_read_request : OUT std_logic;
-        mem_read_feedback : IN std_logic
+		--mem_write_request : OUT std_logic;
+  --     	mem_write_feedback : IN std_logic;
+  --     	mem_read_request : OUT std_logic;
+  --      mem_read_feedback : IN std_logic
 		);
 END ENTITY solving;
 
 ARCHITECTURE bhv of solving IS
 
+	SIGNAL tmp_read_address : unsigned(7 downto 0);
+    SIGNAL tmp_write_address : unsigned(7 downto 0);
+    SIGNAL tmp_data_in : std_logic_vector(3 downto 0);
+
 BEGIN
 
-PROCESS(clk,reset)
-  
-BEGIN
-    IF reset = '0' THEN
-       
-	ELSIF rising_edge(clk) THEN
-       
+	mem_read_address <= "ZZZZZZZZ" WHEN control /= "010" 
+        ELSE tmp_read_address;
 
-        IF control = "011" THEN
-           
-        END IF;
-	
-	END IF;
-END PROCESS;
-
-	PROCESS(mem_read_feedback,mem_write_feedback)
-	BEGIN
-		IF mem_read_feedback = '0' THEN
-			mem_read_address <= "ZZZZZZZZ";
-		END IF;
-		IF mem_write_feedback = '0' THEN
-			mem_write_address <= "ZZZZZZZZ";
-			mem_data_in <= "ZZZZ";
-		END IF;
-	END PROCESS;
+	mem_write_address <= "ZZZZZZZZ" WHEN control /= "001" 
+		ELSE tmp_write_address;
+	mem_data_in <= "ZZZZ" WHEN control /= "001" 
+		ELSE tmp_data_in;
 
 END bhv;

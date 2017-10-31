@@ -11,8 +11,8 @@ ENTITY send IS
 
         mem_read_address: INOUT unsigned(7 downto 0);
         mem_data_out: IN std_logic_vector(3 downto 0);
-        mem_read_request : OUT std_logic;
-        mem_read_feedback : IN std_logic;
+        --mem_read_request : OUT std_logic;
+        --mem_read_feedback : IN std_logic;
 		  
 		spi_write_enable: OUT std_logic;
         spi_data_send: OUT std_logic_vector(7 downto 0);
@@ -26,6 +26,7 @@ ARCHITECTURE bhv of send IS
     SIGNAL spi_data_request_1 : std_logic;
     SIGNAL fal_edge: std_logic;
     SIGNAL location: unsigned(7 downto 0);
+    SIGNAL tmp_read_address : unsigned(7 downto 0);
 
 
 BEGIN
@@ -36,23 +37,19 @@ PROCESS(clk,reset)
     
 BEGIN
     IF reset = '0' THEN
-       
+
 	ELSIF rising_edge(clk) THEN
        spi_data_request_1 <= spi_data_request;
 
         IF control = "010" THEN
             IF spi_data_request = '1' THEN
-                IF mem_read_feedback = '0' THEN
-                    mem_read_address <= "ZZZZZZZZ";
-                ELSE
-                    location <= to_unsigned(x,4) & to_unsigned(y,4);
+                location <= to_unsigned(x,4) & to_unsigned(y,4);
 
-                    mem_read_address <= location;
-                    IF stage = '0' THEN
-                        spi_data_send <= std_logic_vector(location);
-                    ELSE
-                        spi_data_send <= mem_data_out & "0000";
-                    END IF;
+                tmp_read_address <= location;
+                IF stage = '0' THEN
+                    spi_data_send <= std_logic_vector(location);
+                ELSE
+                    spi_data_send <= mem_data_out & "0000";
                 END IF;
             END IF;
 
@@ -77,20 +74,16 @@ BEGIN
             ELSE
                 spi_write_enable <= '0';
             END IF;
+        ELSE
+            mem_read_address <= "ZZZZZZZZ";
         END IF;
-	
 	END IF;
 END PROCESS;
 
 fal_edge <= NOT spi_data_request AND spi_data_request_1;
     
-    --PROCESS(mem_read_feedback)
-    --BEGIN
-    --    IF mem_read_feedback = '0' THEN
-    --        mem_read_address <= "ZZZZZZZZ";
-    --    ELSE
-    --    END IF;
-    --END PROCESS;
+    mem_read_address <= "ZZZZZZZZ" WHEN control /= "010" 
+        ELSE tmp_read_address;
 
 END bhv;
 
