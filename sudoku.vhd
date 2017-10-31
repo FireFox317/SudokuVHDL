@@ -18,7 +18,7 @@ ENTITY sudoku IS
             led_state: OUT std_logic_vector(2 downto 0);
 
             sw_location: IN unsigned(7 downto 0);
-            HEX0: OUT std_logic_vector(6 downto 0)
+            HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY sudoku;
 
@@ -92,7 +92,7 @@ ARCHITECTURE bhv of sudoku IS
 
             sw_location: IN unsigned(7 downto 0);
 
-            HEX0: OUT std_logic_vector(6 downto 0)
+            HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
         );      
     END COMPONENT show;
 
@@ -206,7 +206,9 @@ BEGIN
         mem_read_address => show_mem_read_address_wire,
         mem_data_out => mem_data_out_wire,
         sw_location => sw_location,
-        HEX0 => HEX0
+        HEX0 => HEX0,
+        HEX1 => HEX1,
+        HEX2 => HEX2
         );
 
 mem_read_address_wire <= show_mem_read_address_wire WHEN control_wire = "100" 

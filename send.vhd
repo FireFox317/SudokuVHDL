@@ -34,33 +34,38 @@ PROCESS(clk,reset)
     
 BEGIN
     IF reset = '0' THEN
-       
+        x := 0;
+        y := 0;
+        stage <= '0';
 	ELSIF rising_edge(clk) THEN
        spi_data_request_1 <= spi_data_request;
 
         IF control = "010" THEN
+        
             IF spi_data_request = '1' THEN
-                location <= to_unsigned(x,4) & to_unsigned(y,4);
 
+                location <= to_unsigned(y,4) & to_unsigned(x,4);
                 mem_read_address <= to_integer(location);
                 IF stage = '0' THEN
                     spi_data_send <= std_logic_vector(location);
                 ELSE
-                    spi_data_send <= mem_data_out & "0000";
+                    spi_data_send <=  "0000" & mem_data_out;
                 END IF;
             END IF;
 
             IF fal_edge = '1' THEN
                 spi_write_enable <= '1';
-                IF x = 8 THEN
-                    x := 0;
-                    y := y + 1;
-                ELSE
-                    x := x + 1;
-                END IF;
+                IF stage = '1' THEN
+                    IF x = 8 THEN
+                        x := 0;
+                        y := y + 1;
+                    ELSE
+                        x := x + 1;
+                    END IF;
 
-                IF y = 8 THEN
-                    y := 0;
+                    IF y = 9 THEN
+                        y := 0;
+                    END IF;
                 END IF;
 
                 IF stage = '1' THEN

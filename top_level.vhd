@@ -16,7 +16,7 @@ ENTITY top_level IS
         led_state: OUT std_logic_vector(2 downto 0);
 
         sw_location: IN unsigned(7 downto 0);
-        HEX0: OUT std_logic_vector(6 downto 0)
+        HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY top_level;
 
@@ -38,7 +38,7 @@ ARCHITECTURE bhv of top_level IS
             led_state: OUT std_logic_vector(2 downto 0);
 
             sw_location: IN unsigned(7 downto 0);
-            HEX0: OUT std_logic_vector(6 downto 0)
+            HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
     );         
     END COMPONENT sudoku;
 
@@ -93,7 +93,9 @@ BEGIN
         btn_state => btn_state,
         led_state => led_state,
         sw_location => sw_location,
-        HEX0 => HEX0
+        HEX0 => HEX0,
+        HEX1 => HEX1,
+        HEX2 => HEX2
         );
 
     sp_s: spi_slave GENERIC MAP(N => 8) PORT MAP(

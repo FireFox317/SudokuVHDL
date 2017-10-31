@@ -14,7 +14,7 @@ ENTITY show IS
 
        	sw_location: IN unsigned(7 downto 0);
 
-       	HEX0: OUT std_logic_vector(6 downto 0)
+       	HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY show;
 
@@ -49,12 +49,21 @@ BEGIN
 
 	BEGIN
 		IF reset = '0' THEN
-			
+			HEX0 <= NOT "1000000";
+			HEX1 <= NOT "1000000";
+			HEX2 <= NOT "1000000";
 		ELSIF rising_edge(clk) THEN
 
 			IF control = "100" THEN
 				mem_read_address <= to_integer(sw_location);
 				HEX0 <= hex2display(mem_data_out);
+				HEX1 <= hex2display(std_logic_vector(sw_location(3 downto 0)));
+				HEX2 <= hex2display(std_logic_vector(sw_location(7 downto 4)));
+
+			ELSE
+				HEX0 <= NOT "0000000";
+				HEX1 <= NOT "0000000";
+				HEX2 <= NOT "0000000";
 			END IF;
 
 		END IF;

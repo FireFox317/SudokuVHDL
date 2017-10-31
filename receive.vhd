@@ -20,7 +20,7 @@ END ENTITY receive;
 
 ARCHITECTURE bhv of receive IS
 
-	SIGNAL count: std_logic := '0';
+	SIGNAL stage: std_logic := '0';
 	SIGNAL spi_data_valid_1 : std_logic;
 	SIGNAL edge: std_logic;
 
@@ -30,7 +30,7 @@ BEGIN
 
 	BEGIN
 		IF reset = '0' THEN
-			
+			stage <= '0';
 		ELSIF rising_edge(clk) THEN
 			spi_data_valid_1 <= spi_data_valid;
 
@@ -38,7 +38,7 @@ BEGIN
 				-- receiving
 				mem_write_enable <= '1';
 				IF spi_data_valid = '1' THEN
-					IF count = '0' THEN
+					IF stage = '0' THEN
 						mem_store_address <= to_integer(unsigned(spi_data_receive));
 						
 					ELSE
@@ -49,10 +49,10 @@ BEGIN
 				END IF;
 
 				IF edge = '1' THEN
-					IF count = '0' THEN
-						count <= '1';
+					IF stage = '0' THEN
+						stage <= '1';
 					ELSE
-						count <= '0';
+						stage <= '0';
 					END IF;
 				END IF;
 
