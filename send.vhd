@@ -9,8 +9,10 @@ ENTITY send IS
 
         control : IN std_logic_vector(2 downto 0);
 
-        mem_read_address: OUT integer range 0 to 255;
+        mem_read_address: INOUT integer range 0 to 255;
         mem_data_out: IN std_logic_vector(3 downto 0);
+        mem_read_request : OUT std_logic;
+        mem_read_feedback : IN std_logic;
 		  
 		spi_write_enable: OUT std_logic;
         spi_data_send: OUT std_logic_vector(7 downto 0);

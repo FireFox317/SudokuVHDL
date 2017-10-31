@@ -9,10 +9,11 @@ ENTITY receive IS
 
        	control : IN std_logic_vector(2 downto 0);
 
-       	mem_store_address: OUT integer range 0 to 255;
-       	mem_write_enable : OUT std_logic;
-       	mem_data_in : OUT std_logic_vector(3 downto 0); 
-			
+       	mem_write_address: INOUT integer range 0 to 255;
+       	mem_data_in : INOUT std_logic_vector(3 downto 0);
+       	mem_write_request : OUT std_logic;
+       	mem_write_feedback : IN std_logic;
+		
 		spi_data_valid : IN std_logic;
 		spi_data_receive: IN std_logic_vector(7 downto 0)	
     );		
@@ -35,11 +36,9 @@ BEGIN
 			spi_data_valid_1 <= spi_data_valid;
 
 			IF control = "001" THEN
-				-- receiving
-				mem_write_enable <= '1';
 				IF spi_data_valid = '1' THEN
 					IF count = '0' THEN
-						mem_store_address <= to_integer(unsigned(spi_data_receive));
+						mem_write_address <= to_integer(unsigned(spi_data_receive));
 						
 					ELSE
 						mem_data_in <= spi_data_receive(3 downto 0);
@@ -55,10 +54,6 @@ BEGIN
 						count <= '0';
 					END IF;
 				END IF;
-
-
-			ELSE
-				mem_write_enable <= '0';
 			END IF;
 
 		END IF;
@@ -66,4 +61,10 @@ BEGIN
 
 edge <= NOT spi_data_valid_1 AND spi_data_valid;
 
+	PROCESS
+	BEGIN
+		IF mem_write_feedback = '0' THEN
+			mem_write_address = "ZZZZZZZZ";
+		END IF;
+	END PROCESS;
 END bhv;

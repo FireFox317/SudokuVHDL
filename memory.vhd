@@ -6,8 +6,8 @@ ENTITY memory IS
   PORT(
         clk: IN std_logic;
         data: IN std_logic_vector(3 downto 0);
-        write_address: IN integer RANGE 0 to 255;
-        read_address: IN integer RANGE 0 to 255;
+        write_address: IN unsigned(7 downto 0);
+        read_address: IN unsigned(7 downto 0);
         we: IN std_logic;
         q: OUT std_logic_vector(3 downto 0)
     );
@@ -25,10 +25,10 @@ BEGIN
   IF rising_edge(clk) THEN
 
     IF we = '1' THEN
-      ram_block(write_address) <= data;
+      ram_block(to_integer(write_address)) <= data;
     END IF;
 
-    q <= ram_block(read_address);
+    q <= ram_block(to_integer(read_address));
 
 
   END IF;

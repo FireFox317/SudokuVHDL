@@ -11,6 +11,8 @@ ENTITY show IS
 
        	mem_read_address: OUT integer range 0 to 255;
        	mem_data_out: IN std_logic_vector(3 downto 0);
+       	mem_read_request : OUT std_logic;
+        mem_read_feedback : IN std_logic;
 
        	sw_location: IN unsigned(7 downto 0);
 

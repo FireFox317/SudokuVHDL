@@ -8,13 +8,15 @@ ENTITY solving IS
 
 		control: IN std_logic_vector(2 downto 0);
 
-		mem_read_address: OUT integer range 0 to 255;
+		mem_read_address: INOUT integer range 0 to 255;
 		mem_data_out: IN std_logic_vector(3 downto 0);
+		mem_write_address: INOUT integer range 0 to 255;
+		mem_data_in : INOUT std_logic_vector(3 downto 0);
 
-		mem_store_address: OUT integer range 0 to 255;
-		mem_write_enable: OUT std_logic;
-		mem_data_in : OUT std_logic_vector(3 downto 0)
-
+		mem_write_request : OUT std_logic;
+       	mem_write_feedback : IN std_logic;
+       	mem_read_request : OUT std_logic;
+        mem_read_feedback : IN std_logic
 		);
 END ENTITY solving;
 
@@ -36,5 +38,6 @@ BEGIN
 	
 	END IF;
 END PROCESS;
+
 
 END bhv;
