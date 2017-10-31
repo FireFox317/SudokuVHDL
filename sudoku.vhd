@@ -34,16 +34,6 @@ ARCHITECTURE bhv of sudoku IS
             led_state: OUT std_logic_vector(2 downto 0);
 
             mem_we : OUT std_logic
-
-            
-            
-            
-            
-            
-            
-            
-            
-            
             
         );     
     END COMPONENT controller;
@@ -68,8 +58,7 @@ ARCHITECTURE bhv of sudoku IS
 
             mem_read_address: INOUT unsigned(7 downto 0);
             mem_data_out: IN std_logic_vector(3 downto 0);
-            
-            
+        
               
             spi_write_enable: OUT std_logic;
             spi_data_send: OUT std_logic_vector(7 downto 0);
@@ -141,18 +130,6 @@ SIGNAL q_bus : std_logic_vector(3 downto 0);
 
 SIGNAL we_wire: std_logic;
 
-
-
-
-
-
-
-
-
-
-
-
-
  
 BEGIN
     cont : controller PORT MAP(
@@ -164,16 +141,6 @@ BEGIN
 
         mem_we => we_wire
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         );
 
     mem: memory PORT MAP(
@@ -195,10 +162,6 @@ BEGIN
         mem_data_out => q_bus,
         mem_write_address => write_address_bus,
         mem_data_in => data_bus
-
-        
-        
-        
         
         );   
 
