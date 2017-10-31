@@ -9,7 +9,7 @@ ENTITY send IS
 
         control : IN std_logic_vector(2 downto 0);
 
-        mem_read_address: INOUT integer range 0 to 255;
+        mem_read_address: INOUT unsigned(7 downto 0);
         mem_data_out: IN std_logic_vector(3 downto 0);
         mem_read_request : OUT std_logic;
         mem_read_feedback : IN std_logic;
@@ -42,13 +42,17 @@ BEGIN
 
         IF control = "010" THEN
             IF spi_data_request = '1' THEN
-                location <= to_unsigned(x,4) & to_unsigned(y,4);
-
-                mem_read_address <= to_integer(location);
-                IF stage = '0' THEN
-                    spi_data_send <= std_logic_vector(location);
+                IF mem_read_feedback = '0' THEN
+                    mem_read_address <= "ZZZZZZZZ";
                 ELSE
-                    spi_data_send <= mem_data_out & "0000";
+                    location <= to_unsigned(x,4) & to_unsigned(y,4);
+
+                    mem_read_address <= location;
+                    IF stage = '0' THEN
+                        spi_data_send <= std_logic_vector(location);
+                    ELSE
+                        spi_data_send <= mem_data_out & "0000";
+                    END IF;
                 END IF;
             END IF;
 
@@ -79,7 +83,14 @@ BEGIN
 END PROCESS;
 
 fal_edge <= NOT spi_data_request AND spi_data_request_1;
-
+    
+    --PROCESS(mem_read_feedback)
+    --BEGIN
+    --    IF mem_read_feedback = '0' THEN
+    --        mem_read_address <= "ZZZZZZZZ";
+    --    ELSE
+    --    END IF;
+    --END PROCESS;
 
 END bhv;
 

@@ -9,7 +9,7 @@ ENTITY show IS
 
        	control : IN std_logic_vector(2 downto 0);
 
-       	mem_read_address: OUT integer range 0 to 255;
+       	mem_read_address: OUT unsigned(7 downto 0);
        	mem_data_out: IN std_logic_vector(3 downto 0);
        	mem_read_request : OUT std_logic;
         mem_read_feedback : IN std_logic;
@@ -55,12 +55,22 @@ BEGIN
 		ELSIF rising_edge(clk) THEN
 
 			IF control = "100" THEN
-				mem_read_address <= to_integer(sw_location);
-				HEX0 <= hex2display(mem_data_out);
+				IF mem_read_feedback = '0' THEN
+					mem_read_address <= "ZZZZZZZZ";
+				ELSE
+					mem_read_address <= sw_location;
+					HEX0 <= hex2display(mem_data_out);
+				END IF;
 			END IF;
 
 		END IF;
 	END PROCESS;
 
+	PROCESS(mem_read_feedback)
+	BEGIN
+		IF mem_read_feedback = '0' THEN
+			mem_read_address <= "ZZZZZZZZ";
+		END IF;
+	END PROCESS;
 
 END bhv;
