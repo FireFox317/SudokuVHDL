@@ -36,7 +36,7 @@ BEGIN
 			IF control = "001" THEN
 				IF spi_data_valid = '1' THEN
 					IF stage = '0' THEN
-						tmp_write_address <= unsigned(spi_data_receive);
+						tmp_write_address <= unsigned("0000" & spi_data_receive);
 					ELSE
 						tmp_data_in <= spi_data_receive(3 downto 0);
 					END IF;

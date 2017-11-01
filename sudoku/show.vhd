@@ -59,7 +59,7 @@ BEGIN
 		ELSIF rising_edge(clk) THEN
 
 			IF control = "100" THEN
-				tmp_read_address <= sw_location(3 downto 0) & sw_location(7 downto 4);
+				tmp_read_address <= "0000" & sw_location(3 downto 0) & sw_location(7 downto 4);
 				HEX0 <= hex2display(mem_data_out);
 				HEX1 <= hex2display(std_logic_vector(sw_location(3 downto 0)));
 				HEX2 <= hex2display(std_logic_vector(sw_location(7 downto 4)));
