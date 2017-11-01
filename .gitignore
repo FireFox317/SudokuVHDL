@@ -4,7 +4,8 @@
 *.qpf
 *.sdc
 *.qws
+*.sublime-project
+*.sublime-workspace
 c5_pin_model_dump.txt
 !/sudoku/*
 !/solving/*
-*.sublime-project
