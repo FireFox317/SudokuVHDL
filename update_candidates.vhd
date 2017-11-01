@@ -7,7 +7,6 @@ ENTITY update_candidates IS
 		reset:  IN std_logic;
 		solve_control_data: IN std_logic_vector(2 downto 0);
 		update_candidates_done: OUT std_logic;
-		singles_failed: OUT std_logic;
 		
 		mem_read_address: OUT integer range 0 to 255;
 		mem_data_out: IN std_logic_vector(3 downto 0);

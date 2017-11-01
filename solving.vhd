@@ -25,7 +25,6 @@ COMPONENT update_candidates IS
 	clk: IN std_logic;
 	solve_control_data: IN std_logic_vector(2 downto 0);
 	update_candidates_done: OUT std_logic;	
-	singles_failed: OUT std_logic;
 	
 	mem_read_address: OUT integer range 0 to 255;
 	mem_data_out: IN std_logic_vector(3 downto 0);
@@ -42,6 +41,7 @@ COMPONENT singles IS
 	clk: IN std_logic;
 	solve_control_data: IN std_logic_vector(2 downto 0);
 	singles_done: OUT std_logic;
+	singles_failed: OUT std_logic;
 	
 	mem_read_address: OUT integer range 0 to 255;
 	mem_data_out: IN std_logic_vector(3 downto 0);
@@ -100,7 +100,6 @@ BEGIN
         reset => reset,	
 		solve_control_data => solve_control_data_wire,
 		update_candidates_done => update_candidates_done_wire,
-		singles_failed => singles_failed_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
 		mem_store_address => mem_store_address,
@@ -113,6 +112,7 @@ BEGIN
         reset => reset,	
 		solve_control_data => solve_control_data_wire,
 		singles_done => singles_done_wire,
+		singles_failed => singles_failed_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
 		mem_store_address => mem_store_address,
