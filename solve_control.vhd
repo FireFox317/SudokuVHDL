@@ -16,8 +16,8 @@ END ENTITY solve_control;
 
 ARCHITECTURE bhv OF solve_control IS
 
-	TYPE states IS (update_candidates, singles, hidden_singles);
-	SIGNAL state: states := update_candidates;
+	TYPE states IS (idle, update_candidates, singles, hidden_singles);
+	SIGNAL state: states := idle;
 
 BEGIN
 	
@@ -25,12 +25,15 @@ PROCESS(clk,reset)
 BEGIN
 	IF reset = '0' THEN
 	
+	state <= idle
 	
 	ELSIF rising_edge(clk) THEN
 	
 		IF control = "011" THEN
 		
 			CASE state IS
+				WHEN idle and control = "011" =>
+					state <= update_candidates;				
 				WHEN update_candidates and update_candidates_done = '1' =>
 					state <= singles;
 				WHEN singles and singles_done = '1' =>
