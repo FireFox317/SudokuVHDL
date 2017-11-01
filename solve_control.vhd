@@ -9,6 +9,7 @@ ENTITY solve_control IS
 	singles_done: IN std_logic;
 	singles_failed: IN std_logic;
 	hidden_singles_done: IN std_logic;
+	hidden_singles_failed: IN std_logic;
 	solve_control_data: OUT std_logic_vector(2 downto 0);
 	control: IN std_logic_vector(2 downto 0)
 	);

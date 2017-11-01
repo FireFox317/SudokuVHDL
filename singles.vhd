@@ -46,3 +46,6 @@ BEGIN
 		singles_done <= '1';
 	
 	END IF;
+END PROCESS;
+
+END bhv;

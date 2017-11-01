@@ -59,6 +59,7 @@ COMPONENT hidden_singles IS
 	clk: IN std_logic;
 	solve_control_data: IN std_logic_vector(2 downto 0);
 	hidden_singles_done: OUT std_logic;
+	hidden_singles_failed: OUT std_logic;
 	
 	mem_read_address: OUT integer range 0 to 255;
 	mem_data_out: IN std_logic_vector(3 downto 0);
@@ -77,6 +78,7 @@ COMPONENT solve_control IS
 	singles_done: IN std_logic;
 	singles_failed: IN std_logic;
 	hidden_singles_done: IN std_logic;
+	hidden_singles_failed: IN std_logic;
 	solve_control_data: OUT std_logic_vector(2 downto 0);
 	control: IN std_logic_vector(2 downto 0)
 	);
@@ -88,6 +90,7 @@ SIGNAL singles_done_wire: std_logic;
 SIGNAL hidden_singles_done_wire: std_logic;
 SIGNAL update_candidates_done_wire: std_logic;
 SIGNAL singles_failed_wire: std_logic;
+SIGNAL hidden_singles_failed: std_logic;
 
 
 BEGIN
@@ -124,6 +127,7 @@ BEGIN
         reset => reset,	
 		solve_control_data => solve_control_data_wire,
 		hidden_singles_done => hidden_singles_done_wire,
+		hidden_singles_failed => hidden_singles_failed_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
 		mem_store_address => mem_store_address,
