@@ -19,6 +19,11 @@ ENTITY singles IS
 END ENTITY singles;
 
 ARCHITECTURE bhv OF singles IS
+	
+	SIGNAL tmp_read_address : unsigned(7 downto 0);
+	SIGNAL tmp_write_address : unsigned(7 downto 0);
+	SIGNAL tmp_data_in : std_logic_vector(3 downto 0);
+
 
 	TYPE candidatesudoku IS ARRAY (1 TO 9, 1 TO 9, 0 TO 11) OF natural range 0 to 9; -- array type for possible candidates.
 	SIGNAL candboard : candidatesudoku;
@@ -49,8 +54,17 @@ BEGIN
 			END LOOP;
 		END LOOP;
 		singles_done <= '1';
-	
 	END IF;
+
+	mem_read_address <= (OTHERS => 'Z') WHEN control /= "010" 
+		ELSE tmp_read_address;
+
+	mem_write_address <= (OTHERS => 'Z') WHEN control /= "010" 
+		ELSE tmp_write_address;
+		
+	mem_data_in <= (OTHERS => 'Z') WHEN control /= "010" 
+		ELSE tmp_data_in;
+
 END PROCESS;
 
 END bhv;

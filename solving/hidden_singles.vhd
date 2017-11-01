@@ -20,18 +20,20 @@ END ENTITY hidden_singles;
 
 ARCHITECTURE bhv OF hidden_singles IS
 	
+	SIGNAL tmp_read_address : unsigned(7 downto 0);
+	SIGNAL tmp_write_address : unsigned(7 downto 0);
+	SIGNAL tmp_data_in : std_logic_vector(3 downto 0);
+
 	TYPE hidden_single_store IS ARRAY (1 TO 9, 1 TO 3) OF natural range 0 to 9;
 	SIGNAL hsa : hidden_single_store;
-	
+-- hsa(i,1) is the number of times a certain candidate (i) appears
+-- hsa(i,2) is the x value of the latest candidate of value (i)
+-- hsa(i,3) is the y value of the latest candidate	of value (i)
+	VARIABLE seg : natural range 1 to 9;
 	
 	
 	TYPE candidatesudoku IS ARRAY (1 TO 9, 1 TO 9, 0 TO 11) OF natural range 0 to 9; -- array type for possible candidates.
 	SIGNAL candboard : candidatesudoku;
-	
-	VARIABLE seg : natural range 1 to 9;
--- hsa(i,1) is the number of times a certain candidate (i) appears
--- hsa(i,2) is the x value of the latest candidate of value (i)
--- hsa(i,3) is the y value of the latest candidate	of value (i)
 
 
 BEGIN
@@ -138,4 +140,14 @@ BEGIN
 			hidden_singles_done <= '1';
 		END IF;
 	END PROCESS;
+
+	mem_read_address <= (OTHERS => 'Z') WHEN control /= "011" 
+		ELSE tmp_read_address;
+
+	mem_write_address <= (OTHERS => 'Z') WHEN control /= "011" 
+		ELSE tmp_write_address;
+		
+	mem_data_in <= (OTHERS => 'Z') WHEN control /= "011" 
+		ELSE tmp_data_in;
+
 END bhv;
