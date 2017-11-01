@@ -65,6 +65,8 @@ BEGIN
 				WHEN singles => solve_control_data <= "010";
 				WHEN hidden_singles => solve_control_data <= "011";
 			END CASE;
+
+		
 		
 		END IF;
 	

@@ -55,19 +55,19 @@ ARCHITECTURE bhv OF solving IS
 		
 	COMPONENT hidden_singles IS
 		PORT (
-		reset:  IN std_logic;
-		clk: IN std_logic;
-		solve_control_data: IN std_logic_vector(2 downto 0);
-		hidden_singles_done: OUT std_logic;
-		hidden_singles_failed: OUT std_logic;
-		
-		mem_read_address: OUT unsigned(11 downto 0);
-		mem_data_out: IN std_logic_vector(3 downto 0);
+			reset:  IN std_logic;
+			clk: IN std_logic;
+			solve_control_data: IN std_logic_vector(2 downto 0);
+			hidden_singles_done: OUT std_logic;
+			hidden_singles_failed: OUT std_logic;
+			
+			mem_read_address: OUT unsigned(11 downto 0);
+			mem_data_out: IN std_logic_vector(3 downto 0);
 
-		mem_write_address: OUT unsigned(11 downto 0);
-		mem_write_enable: OUT std_logic;
-		mem_data_in : OUT std_logic_vector(3 downto 0)	
-		);	
+			mem_write_address: OUT unsigned(11 downto 0);
+			mem_write_enable: OUT std_logic;
+			mem_data_in : OUT std_logic_vector(3 downto 0)	
+		);
 	END COMPONENT hidden_singles;
 
 	COMPONENT solve_control IS
@@ -106,9 +106,9 @@ BEGIN
 		update_candidates_done => update_candidates_done_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
-		mem_write_address => mem_write_address,
-		mem_write_enable => mem_write_enable,
-		mem_data_in => mem_data_in
+		mem_write_address => tmp_write_address,
+		mem_write_enable => tmp_write_enable,
+		mem_data_in => tmp_data_in
 	);
 	
 	singl: singles PORT MAP (
@@ -119,9 +119,9 @@ BEGIN
 		singles_failed => singles_failed_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
-		mem_write_address => mem_write_address,
-		mem_write_enable => mem_write_enable,
-		mem_data_in => mem_data_in
+		mem_write_address => tmp_write_address,
+		mem_write_enable => tmp_write_enable,
+		mem_data_in => tmp_data_in
 		
 		
 	);
@@ -134,9 +134,9 @@ BEGIN
 		hidden_singles_failed => hidden_singles_failed_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
-		mem_write_address => mem_write_address,
-		mem_write_enable => mem_write_enable,
-		mem_data_in => mem_data_in
+		mem_write_address => tmp_write_address,
+		mem_write_enable => tmp_write_enable,
+		mem_data_in => tmp_data_in
 		
 	);
 	
