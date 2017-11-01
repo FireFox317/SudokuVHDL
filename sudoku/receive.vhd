@@ -39,7 +39,7 @@ BEGIN
 				END IF;
 			END IF;
 			
-			tmp_write_address <= to_unsigned(count,8);
+			tmp_write_address <= to_unsigned(count,12);
 			tmp_data_in <= "0000";
 
 			stage <= '0';
