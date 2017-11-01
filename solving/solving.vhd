@@ -9,9 +9,9 @@ ENTITY solving IS
 
 		control: IN std_logic_vector(2 downto 0);
 
-		mem_read_address: INOUT unsigned(7 downto 0);
+		mem_read_address: INOUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
-		mem_write_address: INOUT unsigned(7 downto 0);
+		mem_write_address: INOUT unsigned(11 downto 0);
 		mem_data_in : INOUT std_logic_vector(3 downto 0)
 		
 		);
@@ -26,10 +26,10 @@ ARCHITECTURE bhv OF solving IS
 		solve_control_data: IN std_logic_vector(2 downto 0);
 		update_candidates_done: OUT std_logic;	
 		
-		mem_read_address: OUT unsigned(7 downto 0);
+		mem_read_address: OUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
-		mem_store_address: OUT unsigned(7 downto 0);
+		mem_write_address: OUT unsigned(11 downto 0);
 		mem_write_enable: OUT std_logic;
 		mem_data_in : OUT std_logic_vector(3 downto 0)	
 		);
@@ -43,10 +43,10 @@ ARCHITECTURE bhv OF solving IS
 		singles_done: OUT std_logic;
 		singles_failed: OUT std_logic;
 		
-		mem_read_address: OUT unsigned(7 downto 0);
+		mem_read_address: OUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
-		mem_store_address: OUT unsigned(7 downto 0);
+		mem_write_address: OUT unsigned(11 downto 0);
 		mem_write_enable: OUT std_logic;
 		mem_data_in : OUT std_logic_vector(3 downto 0)	
 
@@ -61,10 +61,10 @@ ARCHITECTURE bhv OF solving IS
 		hidden_singles_done: OUT std_logic;
 		hidden_singles_failed: OUT std_logic;
 		
-		mem_read_address: OUT unsigned(7 downto 0);
+		mem_read_address: OUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
-		mem_store_address: OUT unsigned(7 downto 0);
+		mem_write_address: OUT unsigned(11 downto 0);
 		mem_write_enable: OUT std_logic;
 		mem_data_in : OUT std_logic_vector(3 downto 0)	
 		);	
@@ -106,7 +106,7 @@ BEGIN
 		update_candidates_done => update_candidates_done_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
-		mem_store_address => mem_store_address,
+		mem_write_address => mem_write_address,
 		mem_write_enable => mem_write_enable,
 		mem_data_in => mem_data_in
 	);
@@ -119,7 +119,7 @@ BEGIN
 		singles_failed => singles_failed_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
-		mem_store_address => mem_store_address,
+		mem_write_address => mem_write_address,
 		mem_write_enable => mem_write_enable,
 		mem_data_in => mem_data_in
 		
@@ -134,7 +134,7 @@ BEGIN
 		hidden_singles_failed => hidden_singles_failed_wire,
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
-		mem_store_address => mem_store_address,
+		mem_write_address => mem_write_address,
 		mem_write_enable => mem_write_enable,
 		mem_data_in => mem_data_in
 		
