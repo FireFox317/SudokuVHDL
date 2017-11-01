@@ -19,9 +19,17 @@ END ENTITY update_candidates;
 
 ARCHITECTURE bhv OF update_candidates IS
 
+	TYPE candidatesudoku IS ARRAY (1 TO 9, 1 TO 9, 0 TO 11) OF natural range 0 to 9; -- array type for possible candidates.
+	SIGNAL candboard : candidatesudoku;
+	
+
+
 BEGIN
 
 PROCESS(clk,reset)
+
+	VARIABLE i : natural := 1;
+	
 BEGIN
 
 	IF solve_control_data = "010" THEN
@@ -29,7 +37,7 @@ BEGIN
 	ELSIF solve_control_data = "001" THEN
 		FOR x IN 1 to 9 LOOP -- update cadidates: elimination
 			FOR y IN 1 to 9 LOOP
-				IF candboard(x,y,0) /= "0" THEN
+				IF candboard(x,y,0) /= 0 THEN
 					FOR xc IN 1 to 9 LOOP -- eliminate in row
 						IF 	candboard(xc,y,0) = 0 THEN
 							candboard(xc,y,(candboard(x,y,0))) <= 0;
@@ -42,7 +50,9 @@ BEGIN
 							candboard(x,yc,10) <= candboard(x,yc,10) - 1;
 						END IF;
 					END LOOP;
-					I := 1;
+					
+
+					
 					WHILE (i <= 9) LOOP -- eliminate in segment
 						FOR xc IN 1 to 9 LOOP
 							FOR yc IN 1 to 9 LOOP
@@ -54,6 +64,7 @@ BEGIN
 							END LOOP;
 						END LOOP;
 					END LOOP;
+					i := 0;
 				END IF;
 			END LOOP;
 		END LOOP;

@@ -27,23 +27,37 @@ PROCESS(clk,reset)
 BEGIN
 	IF reset = '0' THEN
 	
-	state <= idle
+	state <= idle;
 	
 	ELSIF rising_edge(clk) THEN
 	
 		IF control = "011" THEN
 		
 			CASE state IS
-				WHEN idle and control = "011" =>
-					state <= update_candidates;				
-				WHEN update_candidates and update_candidates_done = '1' =>
-					state <= singles;
-				WHEN singles and singles_done = '1' =>
-					state <= update_candidates;
-				WHEN update_candidates and singles_failed = '1' =>
-					state <= hidden_singles;
-				WHEN hidden_singles and hidden_singles_done '1' =>
-					state <= update_candidates;
+				WHEN idle =>
+					IF control = "011" THEN
+					state <= update_candidates;	
+					END IF;
+					
+				WHEN update_candidates =>
+					IF update_candidates_done = '1' THEN 
+						state <= singles;
+					END IF;
+				
+				WHEN singles =>
+					IF singles_done = '1' THEN
+						state <= update_candidates;
+					END IF;
+				
+				WHEN update_candidates =>
+					IF singles_failed = '1' THEN
+						state <= hidden_singles;
+					END IF;
+				
+				WHEN hidden_singles =>
+					IF hidden_singles_done = '1' THEN
+						state <= update_candidates;
+					END IF;
 			END CASE;
 		
 			CASE state IS

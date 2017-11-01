@@ -20,6 +20,10 @@ END ENTITY singles;
 
 ARCHITECTURE bhv OF singles IS
 
+	TYPE candidatesudoku IS ARRAY (1 TO 9, 1 TO 9, 0 TO 11) OF natural range 0 to 9; -- array type for possible candidates.
+	SIGNAL candboard : candidatesudoku;
+
+
 BEGIN
 
 PROCESS(clk,reset)
@@ -32,7 +36,7 @@ BEGIN
 
 		FOR x IN 1 to 9 LOOP -- find singles
 			FOR y IN 1 to 9 LOOP
-				IF candboard(x,y,0) = 0 and candboard(x,y,10) = 1; -- unique solution found
+				IF (candboard(x,y,0) = 0 and candboard(x,y,10) = 1) THEN -- unique solution found
 					FOR I IN 1 to 9 LOOP
 						IF candboard(x,y,I) /= 0 THEN
 							candboard(x,y,0) <= candboard(x,y,I);
@@ -40,7 +44,7 @@ BEGIN
 							candboard(x,y,10) <= 0;
 						END IF;
 					END LOOP;
-					single_found <= '1';
+					singles_failed <= '0';
 				END IF;
 			END LOOP;
 		END LOOP;

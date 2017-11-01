@@ -22,19 +22,17 @@ ARCHITECTURE bhv OF hidden_singles IS
 	
 	TYPE hidden_single_store IS ARRAY (1 TO 9, 1 TO 3) OF natural range 0 to 9;
 	SIGNAL hsa : hidden_single_store;
+	
+	
+	
+	TYPE candidatesudoku IS ARRAY (1 TO 9, 1 TO 9, 0 TO 11) OF natural range 0 to 9; -- array type for possible candidates.
+	SIGNAL candboard : candidatesudoku;
+	
+	VARIABLE seg : natural range 1 to 9;
 -- hsa(i,1) is the number of times a certain candidate (i) appears
 -- hsa(i,2) is the x value of the latest candidate of value (i)
 -- hsa(i,3) is the y value of the latest candidate	of value (i)
 
-	PROCEDURE reset_hsa IS
-		IF n THEN
-			FOR a IN 1 to 9 LOOP
-				FOR b IN 1 to 3 LOOP
-					hsa(a,b) <= 0;
-				END LOOP;
-			END LOOP;
-		END IF;
-	END reset_hsa;
 
 BEGIN
 
@@ -49,10 +47,15 @@ BEGIN
 		ELSIF solve_control_data = "011" THEN
 			hidden_singles_done <= '0';
 			hidden_singles_failed <= '1';
+			FOR a IN 1 to 9 LOOP
+				FOR b IN 1 to 3 LOOP
+					hsa(a,b) <= 0;
+				END LOOP;
+			END LOOP;
 			FOR x IN 1 to 9 LOOP -- find hidden singles in rows
 				FOR y IN 1 to 9 LOOP
-					IF candboard(x,y,0) = 0 and candboard(x,y,10) > 1; -- several candidates found
-						FOR I IN 1 to 9;
+					IF (candboard(x,y,0) = 0 and candboard(x,y,10) > 1) THEN -- several candidates found
+						FOR I IN 1 to 9 LOOP
 							IF candboard(x,y,I) /= 0 THEN
 								hsa(I,1) <= hsa(I,1) + 1;
 								hsa(I,2) <= x;
@@ -62,7 +65,7 @@ BEGIN
 					END IF;
 				END LOOP;
 			END LOOP;
-			FOR I IN 1 to 9;
+			FOR I IN 1 to 9 LOOP
 				IF hsa(I,1) = 1 THEN
 					candboard(hsa(I,2),hsa(I,3),0) <= hsa(I,1);
 					candboard(hsa(I,2),hsa(I,3),I) <= 0;
@@ -71,12 +74,16 @@ BEGIN
 				END IF;
 			END LOOP;
 
-			reset_hsa;
+			FOR a IN 1 to 9 LOOP
+				FOR b IN 1 to 3 LOOP
+					hsa(a,b) <= 0;
+				END LOOP;
+			END LOOP;
 
 			FOR y IN 1 to 9 LOOP -- find hidden singles in columns
 				FOR x IN 1 to 9 LOOP
-					IF candboard(x,y,0) = 0 and candboard(x,y,10) > 1; -- several candidates found
-						FOR I IN 1 to 9;
+					IF (candboard(x,y,0) = 0 and candboard(x,y,10) > 1) THEN -- several candidates found
+						FOR I IN 1 to 9 LOOP
 							IF candboard(x,y,I) /= 0 THEN
 								hsa(I,1) <= hsa(I,1) + 1;
 								hsa(I,2) <= x;
@@ -86,7 +93,7 @@ BEGIN
 					END IF;
 				END LOOP;
 			END LOOP;
-			FOR I IN 1 to 9;
+			FOR I IN 1 to 9 LOOP
 				IF hsa(I,1) = 1 THEN
 					candboard(hsa(I,2),hsa(I,3),0) <= hsa(I,1);
 					candboard(hsa(I,2),hsa(I,3),I) <= 0;
@@ -95,14 +102,18 @@ BEGIN
 				END IF;
 			END LOOP;
 
-			reset_hsa;
+			FOR a IN 1 to 9 LOOP
+				FOR b IN 1 to 3 LOOP
+					hsa(a,b) <= 0;
+				END LOOP;
+			END LOOP;
 
 			seg := 1;
 			WHILE (seg <= 9) LOOP -- find hidden singles in segment 
 				FOR x IN 1 to 9 LOOP
 					FOR y IN 1 to 9 LOOP
 						IF candboard(x,y,11) = seg THEN
-							IF candboard(x,y,0) = 0 and candboard(x,y,10) > 1; -- several candidates found
+							IF (candboard(x,y,0) = 0 and candboard(x,y,10) > 1) THEN -- several candidates found
 								FOR I IN 1 to 9 LOOP
 									IF candboard(x,y,I) /= 0 THEN
 										hsa(I,1) <= hsa(I,1) + 1;
@@ -114,7 +125,7 @@ BEGIN
 						END IF;
 					END LOOP;
 				END LOOP;
-				FOR I IN 1 to 9;
+				FOR I IN 1 to 9 LOOP
 					IF hsa(I,1) = 1 THEN
 						candboard(hsa(I,2),hsa(I,3),0) <= hsa(I,1);
 						candboard(hsa(I,2),hsa(I,3),I) <= 0;

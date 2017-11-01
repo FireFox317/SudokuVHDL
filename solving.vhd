@@ -33,7 +33,7 @@ COMPONENT update_candidates IS
 	mem_write_enable: OUT std_logic;
 	mem_data_in : OUT std_logic_vector(3 downto 0)	
 	);
-END COMPONENT solve_control;
+END COMPONENT update_candidates;
 	
 COMPONENT singles IS
 	PORT (
@@ -51,7 +51,7 @@ COMPONENT singles IS
 	mem_data_in : OUT std_logic_vector(3 downto 0)	
 
 	);
-END COMPONENT solve_control;
+END COMPONENT singles;
 	
 COMPONENT hidden_singles IS
 	PORT (
@@ -68,7 +68,7 @@ COMPONENT hidden_singles IS
 	mem_write_enable: OUT std_logic;
 	mem_data_in : OUT std_logic_vector(3 downto 0)	
 	);	
-END COMPONENT solve_control;
+END COMPONENT hidden_singles;
 
 COMPONENT solve_control IS
 	PORT (
@@ -90,7 +90,7 @@ SIGNAL singles_done_wire: std_logic;
 SIGNAL hidden_singles_done_wire: std_logic;
 SIGNAL update_candidates_done_wire: std_logic;
 SIGNAL singles_failed_wire: std_logic;
-SIGNAL hidden_singles_failed: std_logic;
+SIGNAL hidden_singles_failed_wire: std_logic;
 
 
 BEGIN
@@ -143,6 +143,7 @@ BEGIN
 		singles_done => singles_done_wire,
 		singles_failed => singles_failed_wire,
 		hidden_singles_done => hidden_singles_done_wire,
+		hidden_singles_failed => hidden_singles_failed_wire,
 		solve_control_data => solve_control_data_wire,
 		control => control
 		
