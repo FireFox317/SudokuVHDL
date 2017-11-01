@@ -45,19 +45,20 @@ BEGIN
         
             IF spi_data_request = '1' THEN
 
-                location <= to_unsigned(x,4) & to_unsigned(y,4);
-
+                    location <= to_unsigned(y,4) & to_unsigned(x,4);
 					tmp_read_address <= location;
-					IF stage = '0' THEN
+
+					IF stage = '1' THEN
 						spi_data_send <= std_logic_vector(location);
 					ELSE
-						spi_data_send <= mem_data_out & "0000";
+						spi_data_send <=  "0000" & mem_data_out;
 					END IF;
+
             END IF;
 
             IF fal_edge = '1' THEN
                 spi_write_enable <= '1';
-                IF stage = '1' THEN
+                IF stage = '0' THEN
                     IF x = 8 THEN
                         x := 0;
                         y := y + 1;
