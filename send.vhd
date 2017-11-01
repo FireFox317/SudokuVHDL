@@ -3,30 +3,31 @@ USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 
 ENTITY send IS
-  PORT (
+	PORT (
 		clk: IN std_logic;
-        reset: IN std_logic;
+		reset: IN std_logic;
 
-        control : IN std_logic_vector(2 downto 0);
+		control : IN std_logic_vector(2 downto 0);
 
-        mem_read_address: OUT integer range 0 to 255;
-        mem_data_out: IN std_logic_vector(3 downto 0);
-		  
+		mem_read_address: INOUT unsigned(7 downto 0);
+		mem_data_out: IN std_logic_vector(3 downto 0);
+
 		spi_write_enable: OUT std_logic;
-        spi_data_send: OUT std_logic_vector(7 downto 0);
-        spi_data_request: IN std_logic
-    );		
+		spi_data_send: OUT std_logic_vector(7 downto 0);
+		spi_data_request: IN std_logic
+	);		
 END ENTITY send;
 
 ARCHITECTURE bhv of send IS
 
-    SIGNAL stage : std_logic := '0';
-    SIGNAL spi_data_request_1 : std_logic;
-    SIGNAL fal_edge: std_logic;
-    SIGNAL location: unsigned(7 downto 0);
-
+	SIGNAL stage : std_logic := '0';
+	SIGNAL spi_data_request_1 : std_logic;
+	SIGNAL fal_edge: std_logic;
+	SIGNAL location: unsigned(7 downto 0);
+	SIGNAL tmp_read_address : unsigned(7 downto 0);
 
 BEGIN
+
 
 PROCESS(clk,reset)
     VARIABLE x: integer range 0 to 8 := 0;
@@ -44,18 +45,20 @@ BEGIN
         
             IF spi_data_request = '1' THEN
 
-                location <= to_unsigned(y,4) & to_unsigned(x,4);
-                mem_read_address <= to_integer(location);
-                IF stage = '0' THEN
-                    spi_data_send <= std_logic_vector(location);
-                ELSE
-                    spi_data_send <=  "0000" & mem_data_out;
-                END IF;
+                    location <= to_unsigned(y,4) & to_unsigned(x,4);
+					tmp_read_address <= location;
+
+					IF stage = '1' THEN
+						spi_data_send <= std_logic_vector(location);
+					ELSE
+						spi_data_send <=  "0000" & mem_data_out;
+					END IF;
+
             END IF;
 
             IF fal_edge = '1' THEN
                 spi_write_enable <= '1';
-                IF stage = '1' THEN
+                IF stage = '0' THEN
                     IF x = 8 THEN
                         x := 0;
                         y := y + 1;
@@ -77,12 +80,15 @@ BEGIN
                 spi_write_enable <= '0';
             END IF;
         END IF;
+
+    END IF;
+
+    END PROCESS;
+
+	fal_edge <= NOT spi_data_request AND spi_data_request_1;
 	
-	END IF;
-END PROCESS;
-
-fal_edge <= NOT spi_data_request AND spi_data_request_1;
-
+	mem_read_address <= "ZZZZZZZZ" WHEN control /= "010" 
+		ELSE tmp_read_address;
 
 END bhv;
 
