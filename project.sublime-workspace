@@ -243,6 +243,23 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "solving/solving.vhd",
+			"settings":
+			{
+				"buffer_size": 4552,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "sudoku/receive.vhd",
+			"settings":
+			{
+				"buffer_size": 1644,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -268,9 +285,45 @@
 	"command_palette":
 	{
 		"height": 173.0,
-		"last_filter": "install ",
+		"last_filter": "git push",
 		"selected_items":
 		[
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git pull",
+				"Git: Pull"
+			],
+			[
+				"push",
+				"Git: Push"
+			],
+			[
+				"git qui",
+				"Git: Quick Commit (repo)"
+			],
+			[
+				"git add",
+				"Git: Add All"
+			],
+			[
+				"git change",
+				"Git: Change Branch"
+			],
+			[
+				"git comm",
+				"Git: Commit"
+			],
+			[
+				"git add ",
+				"Git: Add All"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
 			[
 				"install ",
 				"Package Control: Install Package"
@@ -324,10 +377,20 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku"
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/solving",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/sudoku"
 	],
 	"file_history":
 	[
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/sudoku/receive.vhd",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/sudoku/send.vhd",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/sudoku/show.vhd",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/sudoku/sudoku.vhd",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/solving/solving.vhd",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/.gitignore",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/project.sublime-project",
+		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/c5_pin_model_dump.txt",
 		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/sudoku.vhd",
 		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/memory.vhd",
 		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/show.vhd",
@@ -339,7 +402,6 @@
 		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/multiplexer.vhd",
 		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/top_level.vhd",
 		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/top_level.qsf",
-		"/C/Users/Timon Kruiper/Documents/UniversityTwente/Jaar 2/Module 5 - Computer systems/Project/Sudoku/.gitignore",
 		"/C/Users/Timon Kruiper/Downloads/SudokuSolver (1).vhd",
 		"/C/Users/Timon Kruiper/AppData/Local/Temp/scp42245/home/pi/workspace/Test/send.py",
 		"/C/Users/Timon Kruiper/AppData/Local/Temp/scp42766/home/pi/workspace/Test/receive.py",
@@ -484,8 +546,67 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "solving/solving.vhd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4552,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4552,
+								4552
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/VHDL/Syntaxes/VHDL.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 794.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "sudoku/receive.vhd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1644,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								913,
+								913
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/VHDL/Syntaxes/VHDL.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 255.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -527,6 +648,10 @@
 	"output.find_results":
 	{
 		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 118.0
 	},
 	"pinned_build_system": "",
 	"project": "project.sublime-project",

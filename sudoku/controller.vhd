@@ -12,7 +12,13 @@ ENTITY controller IS
 		btn_state: IN std_logic;
 		led_state: OUT std_logic_vector(2 downto 0);
 
-		mem_we : OUT std_logic
+		mem_we : OUT std_logic;
+
+		sw_mode: IN std_logic;
+		raspi_receive: IN std_logic;
+		raspi_send: OUT std_logic;
+
+		HEX5: OUT std_logic_vector(6 downto 0)
 	);		
 END ENTITY controller;
 
@@ -32,14 +38,21 @@ BEGIN
 			state <= receiving;
 		ELSIF rising_edge(clk) THEN
 			btn_state_1 <= NOT btn_state;
-
-			IF edge = '1' THEN
-				CASE state IS
-					WHEN receiving => state <= sending;
-					WHEN sending => state <= showing;
-					WHEN showing => state <= solving;
-					WHEN solving => state <= receiving;
-				END CASE;
+			IF sw_mode = '0' THEN
+				-- manual mode
+				IF edge = '1' THEN
+					CASE state IS
+						WHEN receiving => state <= sending;
+						WHEN sending => state <= showing;
+						WHEN showing => state <= solving;
+						WHEN solving => state <= receiving;
+					END CASE;
+				END IF;				
+			ELSE
+				-- automatic mode
+				IF raspi_receive = '1' THEN
+					state <= receiving;
+				END IF;
 			END IF;
 
 			CASE state IS
@@ -56,9 +69,11 @@ BEGIN
 								led_state <= "011";
 								mem_we <= '1';
 			END CASE;
+
 		END IF;
 	END PROCESS;
 
 	edge <= NOT btn_state_1 AND NOT btn_state;
+	HEX5 <= NOT "1110111" WHEN sw_mode = '1' ELSE NOT "1110110";
 
 END bhv;
