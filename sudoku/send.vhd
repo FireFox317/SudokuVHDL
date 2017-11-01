@@ -23,11 +23,10 @@ ARCHITECTURE bhv of send IS
 	SIGNAL stage : std_logic := '0';
 	SIGNAL spi_data_request_1 : std_logic;
 	SIGNAL fal_edge: std_logic;
-	SIGNAL location: unsigned(7 downto 0);
+	SIGNAL location: unsigned(11 downto 0);
 	SIGNAL tmp_read_address : unsigned(11 downto 0);
 
 BEGIN
-
 
 PROCESS(clk,reset)
     VARIABLE x: integer range 0 to 8 := 0;
@@ -45,11 +44,11 @@ BEGIN
         
             IF spi_data_request = '1' THEN
 
-                    location <= to_unsigned(y,4) & to_unsigned(x,4);
+                    location <= "0000" & to_unsigned(y,4) & to_unsigned(x,4);
 					tmp_read_address <= location;
 
 					IF stage = '1' THEN
-						spi_data_send <= std_logic_vector(location);
+						spi_data_send <= std_logic_vector(location(7 downto 0));
 					ELSE
 						spi_data_send <=  "0000" & mem_data_out;
 					END IF;

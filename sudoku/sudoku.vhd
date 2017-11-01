@@ -118,9 +118,9 @@ ARCHITECTURE bhv of sudoku IS
 
 SIGNAL control_wire: std_logic_vector(2 downto 0);
 
-SIGNAL write_address_bus : unsigned(7 downto 0);
+SIGNAL write_address_bus : unsigned(11 downto 0);
 SIGNAL data_bus : std_logic_vector(3 downto 0);
-SIGNAL read_address_bus : unsigned(7 downto 0);
+SIGNAL read_address_bus : unsigned(11 downto 0);
 SIGNAL q_bus : std_logic_vector(3 downto 0);
 
 SIGNAL we_wire: std_logic;
