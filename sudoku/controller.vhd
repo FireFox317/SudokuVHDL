@@ -50,9 +50,9 @@ BEGIN
 				END IF;				
 			ELSE
 				-- automatic mode
-				IF raspi_receive = '1' THEN
-					state <= receiving;
-				END IF;
+				--IF raspi_receive = '1' THEN
+				--	state <= receiving;
+				--END IF;
 			END IF;
 
 			CASE state IS
