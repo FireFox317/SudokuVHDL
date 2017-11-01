@@ -3,8 +3,8 @@ USE IEEE.std_logic_1164.ALL;
 
 ENTITY singles IS
 	PORT (
-		reset:  IN std_logic;
 		clk: IN std_logic;
+		reset:  IN std_logic;
 		solve_control_data: IN std_logic_vector(2 downto 0);
 		singles_done: OUT std_logic;
 		
