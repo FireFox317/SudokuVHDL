@@ -30,6 +30,7 @@ BEGIN
 
 	mem_write_address <= "ZZZZZZZZ" WHEN control /= "001" 
 		ELSE tmp_write_address;
+		
 	mem_data_in <= "ZZZZ" WHEN control /= "001" 
 		ELSE tmp_data_in;
 
