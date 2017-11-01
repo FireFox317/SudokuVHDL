@@ -18,23 +18,31 @@ ENTITY solving IS
 		);
 END ENTITY solving;
 
-ARCHITECTURE bhv of solving IS
+ARCHITECTURE bhv OF solving IS
 
-BEGIN
-
-PROCESS(clk,reset)
-  
-BEGIN
-    IF reset = '0' THEN
-       
-	ELSIF rising_edge(clk) THEN
-       
-
-        IF control = "011" THEN
-           
-        END IF;
+COMPONENT update_candidates IS
+    PORT (
+		
+	);
 	
-	END IF;
-END PROCESS;
+COMPONENT singles IS
+	PORT (
+	
+	);
+	
+COMPONENT hidden_singles IS
+	PORT (
+	
+	);
+
+COMPONENT solve_control IS
+	PORT (
+	
+	);
+
+
+
+BEGIN
+
 
 END bhv;
