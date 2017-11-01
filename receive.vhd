@@ -9,7 +9,7 @@ ENTITY receive IS
 
 		control : IN std_logic_vector(2 downto 0);
 
-		mem_write_address: INOUT unsigned(7 downto 0);
+		mem_write_address: INOUT unsigned(11 downto 0);
 		mem_data_in : INOUT std_logic_vector(3 downto 0);
 		
 		spi_data_valid : IN std_logic;
@@ -22,7 +22,7 @@ ARCHITECTURE bhv of receive IS
 	SIGNAL stage: std_logic := '0';
 	SIGNAL spi_data_valid_1 : std_logic;
 	SIGNAL edge: std_logic;
-	SIGNAL tmp_write_address : unsigned(7 downto 0);
+	SIGNAL tmp_write_address : unsigned(11 downto 0);
 	SIGNAL tmp_data_in : std_logic_vector(3 downto 0);
 
 BEGIN
@@ -55,9 +55,9 @@ BEGIN
 
 	edge <= NOT spi_data_valid AND spi_data_valid_1;
 
-	mem_write_address <= "ZZZZZZZZ" WHEN control /= "001" 
+	mem_write_address <= (OTHERS => 'Z') WHEN control /= "001" 
 		ELSE tmp_write_address;
 
-	mem_data_in <= "ZZZZ" WHEN control /= "001" 
+	mem_data_in <= (OTHERS => 'Z') WHEN control /= "001" 
 		ELSE tmp_data_in;
 END bhv;

@@ -153,13 +153,13 @@ BEGIN
 		
 	);
 	
-	mem_read_address <= "ZZZZZZZZ" WHEN control /= "011" 
+	mem_read_address <= (OTHERS => 'Z') WHEN control /= "011" 
 		ELSE tmp_read_address;
 
-	mem_write_address <= "ZZZZZZZZ" WHEN control /= "011" 
+	mem_write_address <= (OTHERS => 'Z') WHEN control /= "011" 
 		ELSE tmp_write_address;
 		
-	mem_data_in <= "ZZZZ" WHEN control /= "011" 
+	mem_data_in <= (OTHERS => 'Z') WHEN control /= "011" 
 		ELSE tmp_data_in;
 
 END bhv;

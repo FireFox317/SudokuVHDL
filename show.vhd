@@ -9,7 +9,7 @@ ENTITY show IS
 
 		control : IN std_logic_vector(2 downto 0);
 
-		mem_read_address: INOUT unsigned(7 downto 0);
+		mem_read_address: INOUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
 		sw_location: IN unsigned(7 downto 0);
@@ -43,9 +43,8 @@ ARCHITECTURE bhv of show IS
 	END CASE;
   END hex2display;
 
-	SIGNAL tmp_write_address : unsigned(7 downto 0);
 	SIGNAL tmp_data_in : std_logic_vector(3 downto 0);
-	SIGNAL tmp_read_address : unsigned(7 downto 0);
+	SIGNAL tmp_read_address : unsigned(11 downto 0);
 
 BEGIN
 
@@ -74,7 +73,7 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-	mem_read_address <= "ZZZZZZZZ" WHEN control /= "010" 
+	mem_read_address <= (OTHERS => 'Z') WHEN control /= "010" 
 		ELSE tmp_read_address;
 
 END bhv;

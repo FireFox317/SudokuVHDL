@@ -9,7 +9,7 @@ ENTITY send IS
 
 		control : IN std_logic_vector(2 downto 0);
 
-		mem_read_address: INOUT unsigned(7 downto 0);
+		mem_read_address: INOUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
 		spi_write_enable: OUT std_logic;
@@ -24,7 +24,7 @@ ARCHITECTURE bhv of send IS
 	SIGNAL spi_data_request_1 : std_logic;
 	SIGNAL fal_edge: std_logic;
 	SIGNAL location: unsigned(7 downto 0);
-	SIGNAL tmp_read_address : unsigned(7 downto 0);
+	SIGNAL tmp_read_address : unsigned(11 downto 0);
 
 BEGIN
 
@@ -87,7 +87,7 @@ BEGIN
 
 	fal_edge <= NOT spi_data_request AND spi_data_request_1;
 	
-	mem_read_address <= "ZZZZZZZZ" WHEN control /= "010" 
+	mem_read_address <= (OTHERS => 'Z') WHEN control /= "010" 
 		ELSE tmp_read_address;
 
 END bhv;

@@ -42,8 +42,8 @@ ARCHITECTURE bhv of sudoku IS
         PORT(
             clk: IN std_logic;
             data: IN std_logic_vector(3 downto 0);
-            write_address: IN unsigned(7 downto 0);
-            read_address: IN unsigned(7 downto 0);
+            write_address: IN unsigned(11 downto 0);
+            read_address: IN unsigned(11 downto 0);
             we: IN std_logic;
             q: OUT std_logic_vector(3 downto 0)
         );
@@ -56,7 +56,7 @@ ARCHITECTURE bhv of sudoku IS
 
             control : IN std_logic_vector(2 downto 0);
 
-            mem_read_address: INOUT unsigned(7 downto 0);
+            mem_read_address: INOUT unsigned(11 downto 0);
             mem_data_out: IN std_logic_vector(3 downto 0);
         
               
@@ -73,7 +73,7 @@ ARCHITECTURE bhv of sudoku IS
 
                 control : IN std_logic_vector(2 downto 0);
 
-                mem_write_address: INOUT unsigned(7 downto 0);
+                mem_write_address: INOUT unsigned(11 downto 0);
                 mem_data_in : INOUT std_logic_vector(3 downto 0);
 
                 spi_data_valid : IN std_logic;
@@ -89,9 +89,9 @@ ARCHITECTURE bhv of sudoku IS
 
             control: IN std_logic_vector(2 downto 0);
 
-             mem_read_address: INOUT unsigned(7 downto 0);
+             mem_read_address: INOUT unsigned(11 downto 0);
         mem_data_out: IN std_logic_vector(3 downto 0);
-        mem_write_address: INOUT unsigned(7 downto 0);
+        mem_write_address: INOUT unsigned(11 downto 0);
         mem_data_in : INOUT std_logic_vector(3 downto 0)
 
             );
@@ -105,7 +105,7 @@ ARCHITECTURE bhv of sudoku IS
 
             control : IN std_logic_vector(2 downto 0);
 
-            mem_read_address: INOUT unsigned(7 downto 0);
+            mem_read_address: INOUT unsigned(11 downto 0);
             mem_data_out: IN std_logic_vector(3 downto 0);
             
             
