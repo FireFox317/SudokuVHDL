@@ -53,7 +53,7 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-	edge <= NOT spi_data_valid_1 AND spi_data_valid;
+	edge <= NOT spi_data_valid AND spi_data_valid_1;
 
 	mem_write_address <= "ZZZZZZZZ" WHEN control /= "001" 
 		ELSE tmp_write_address;
