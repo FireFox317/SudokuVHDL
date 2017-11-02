@@ -16,6 +16,7 @@ ENTITY sudoku IS
 
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
+            led_state_solve: OUT std_logic_vector(2 downto 0);
 
             raspi_receive: IN std_logic;
             raspi_send: OUT std_logic;
@@ -101,10 +102,12 @@ ARCHITECTURE bhv of sudoku IS
 
             control: IN std_logic_vector(2 downto 0);
 
-             mem_read_address: INOUT unsigned(11 downto 0);
+             --mem_read_address: INOUT unsigned(11 downto 0);
         mem_data_out: IN std_logic_vector(3 downto 0);
         mem_write_address: INOUT unsigned(11 downto 0);
-        mem_data_in : INOUT std_logic_vector(3 downto 0)
+        mem_data_in : INOUT std_logic_vector(3 downto 0);
+
+        led_state_solve: OUT std_logic_vector(2 downto 0)
 
             );
     END COMPONENT solving;
@@ -169,10 +172,11 @@ BEGIN
 
         control => control_wire,
 
-        mem_read_address => read_address_bus,
+        --mem_read_address => read_address_bus,
         mem_data_out => q_bus,
         mem_write_address => write_address_bus,
-        mem_data_in => data_bus
+        mem_data_in => data_bus,
+        led_state_solve => led_state_solve
         
         );   
 

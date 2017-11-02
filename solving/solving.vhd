@@ -9,10 +9,13 @@ ENTITY solving IS
 
 		control: IN std_logic_vector(2 downto 0);
 
-		mem_read_address: INOUT unsigned(11 downto 0);
+		--mem_read_address: INOUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 		mem_write_address: INOUT unsigned(11 downto 0);
-		mem_data_in : INOUT std_logic_vector(3 downto 0)
+		mem_data_in : INOUT std_logic_vector(3 downto 0);
+
+		
+	led_state_solve: OUT std_logic_vector(2 downto 0)
 		
 		);
 END ENTITY solving;
@@ -26,7 +29,7 @@ ARCHITECTURE bhv OF solving IS
 		solve_control_data: IN std_logic_vector(2 downto 0);
 		update_candidates_done: OUT std_logic;	
 		
-		mem_read_address: OUT unsigned(11 downto 0);
+		--mem_read_address: OUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
 		mem_write_address: OUT unsigned(11 downto 0);
@@ -77,7 +80,8 @@ ARCHITECTURE bhv OF solving IS
 		--hidden_singles_done: IN std_logic;
 		--hidden_singles_failed: IN std_logic;
 		solve_control_data: OUT std_logic_vector(2 downto 0);
-		control: IN std_logic_vector(2 downto 0)
+		control: IN std_logic_vector(2 downto 0);
+	led_state_solve: OUT std_logic_vector(2 downto 0)
 		);
 	END COMPONENT solve_control;
 
@@ -101,7 +105,7 @@ BEGIN
         reset => reset,	
 		solve_control_data => solve_control_data_wire,
 		update_candidates_done => update_candidates_done_wire,
-		mem_read_address => mem_read_address,
+		--mem_read_address => tmp_read_address,
 		mem_data_out => mem_data_out,
 		mem_write_address => tmp_write_address,
 		mem_data_in => tmp_data_in
@@ -143,12 +147,13 @@ BEGIN
 		--hidden_singles_done => hidden_singles_done_wire,
 		--hidden_singles_failed => hidden_singles_failed_wire,
 		solve_control_data => solve_control_data_wire,
-		control => control
+		control => control,
+		led_state_solve => led_state_solve
 		
 	);
 	
-	mem_read_address <= (OTHERS => 'Z') WHEN control /= "011" 
-		ELSE tmp_read_address;
+	--mem_read_address <= (OTHERS => 'Z') WHEN control /= "011" 
+	--	ELSE tmp_read_address;
 
 	mem_write_address <= (OTHERS => 'Z') WHEN control /= "011" 
 		ELSE tmp_write_address;

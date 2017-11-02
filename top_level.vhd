@@ -14,6 +14,7 @@ ENTITY top_level IS
 
         btn_state: IN std_logic;
         led_state: OUT std_logic_vector(2 downto 0);
+        led_state_solve: OUT std_logic_vector(2 downto 0);
         
         raspi_receive: IN std_logic;
         raspi_send: OUT std_logic;
@@ -41,6 +42,7 @@ ARCHITECTURE bhv of top_level IS
 
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
+            led_state_solve: OUT std_logic_vector(2 downto 0);
 
             raspi_receive: IN std_logic;
             raspi_send: OUT std_logic;
@@ -102,6 +104,7 @@ BEGIN
 
         btn_state => btn_state,
         led_state => led_state,
+        led_state_solve => led_state_solve,
         sw_location => sw_location,
         HEX0 => HEX0,
         HEX1 => HEX1,
