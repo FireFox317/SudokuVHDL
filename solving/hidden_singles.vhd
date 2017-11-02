@@ -1,5 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
+USE sudoku_package.ALL;
 
 ENTITY hidden_singles IS
 	PORT (
@@ -69,9 +70,9 @@ BEGIN
 			END LOOP;
 			FOR I IN 1 to 9 LOOP
 				IF hsa(I,1) = 1 THEN
-					candboard(hsa(I,2),hsa(I,3),0) <= hsa(I,1);
-					candboard(hsa(I,2),hsa(I,3),I) <= 0;
-					candboard(hsa(I,2),hsa(I,3),10) <= 0;
+					candboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
+					candboard(hsa(I,2),hsa(I,3),I,0);
+					candboard(hsa(I,2),hsa(I,3),10,0);
 					hidden_singles_failed <= '0';
 				END IF;
 			END LOOP;
@@ -97,9 +98,9 @@ BEGIN
 			END LOOP;
 			FOR I IN 1 to 9 LOOP
 				IF hsa(I,1) = 1 THEN
-					candboard(hsa(I,2),hsa(I,3),0) <= hsa(I,1);
-					candboard(hsa(I,2),hsa(I,3),I) <= 0;
-					candboard(hsa(I,2),hsa(I,3),10) <= 0;
+					candboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
+					candboard(hsa(I,2),hsa(I,3),I,0);
+					candboard(hsa(I,2),hsa(I,3),10,0);
 					hidden_singles_failed <= '0';
 				END IF;
 			END LOOP;
@@ -129,9 +130,9 @@ BEGIN
 				END LOOP;
 				FOR I IN 1 to 9 LOOP
 					IF hsa(I,1) = 1 THEN
-						candboard(hsa(I,2),hsa(I,3),0) <= hsa(I,1);
-						candboard(hsa(I,2),hsa(I,3),I) <= 0;
-						candboard(hsa(I,2),hsa(I,3),10) <= 0;
+						candboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
+						candboard(hsa(I,2),hsa(I,3),I,0);
+						candboard(hsa(I,2),hsa(I,3),10,0);
 						hidden_singles_failed <= '0';
 					END IF;
 				END LOOP;

@@ -1,5 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
+USE sudoku_package.ALL;
 
 ENTITY update_candidates IS
 	PORT (
@@ -60,13 +61,13 @@ BEGIN
 						FOR xc IN 1 to 9 LOOP -- eliminate in row
 							IF 	candboard(xc,y,0) = 0 THEN
 								wcandboard(xc,y,(candboard(x,y,0)),0);
-								candboard(xc,y,10) <= candboard(xc,y,10) - 1;
+								wcandboard(xc,y,10,candboard(xc,y,10) - 1);
 							END IF;
 						END LOOP;
 						FOR yc IN 1 to 9 LOOP -- eliminate in column
 							IF 	candboard(x,yc,0) = 0 THEN
-								candboard(x,yc,(candboard(x,y,0))) <= 0;
-								candboard(x,yc,10) <= candboard(x,yc,10) - 1;
+								wcandboard(x,yc,(candboard(x,y,0)),0);
+								wcandboard(x,yc,10,candboard(xc,y,10) - 1);
 							END IF;
 						END LOOP;
 						
@@ -76,8 +77,8 @@ BEGIN
 							FOR xc IN 1 to 9 LOOP
 								FOR yc IN 1 to 9 LOOP
 									IF	candboard(xc,yc,11) = candboard(x,y,11) THEN
-										candboard(x,yc,(candboard(x,y,0))) <= 0;
-										candboard(x,yc,10) <= candboard(x,yc,10) - 1;
+										wcandboard(x,yc,(candboard(x,y,0)),0);
+										wcandboard(x,yc,10,candboard(x,yc,10) - 1 );
 										i := i + 1;
 									END IF;
 								END LOOP;
