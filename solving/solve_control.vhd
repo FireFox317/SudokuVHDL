@@ -7,10 +7,10 @@ ENTITY solve_control IS
 	clk: IN std_logic;
 	reset: IN std_logic;
 	update_candidates_done: IN std_logic;
-	singles_done: IN std_logic;
-	singles_failed: IN std_logic;
-	hidden_singles_done: IN std_logic;
-	hidden_singles_failed: IN std_logic;
+	--singles_done: IN std_logic;
+	--singles_failed: IN std_logic;
+	--hidden_singles_done: IN std_logic;
+	--hidden_singles_failed: IN std_logic;
 	solve_control_data: OUT std_logic_vector(2 downto 0);
 	control: IN std_logic_vector(2 downto 0)
 	);
@@ -45,26 +45,29 @@ BEGIN
 						state <= singles;
 					END IF;
 				
-				WHEN singles =>
-					IF singles_done = '1' THEN
-						state <= update_candidates;
-					END IF;
+				--WHEN singles =>
+				--	IF singles_done = '1' THEN
+				--		state <= update_candidates;
+				--	END IF;
 				
-				WHEN update_candidates =>
-					IF singles_failed = '1' THEN
-						state <= hidden_singles;
-					END IF;
+				--WHEN update_candidates =>
+				--	IF singles_failed = '1' THEN
+				--		state <= hidden_singles;
+				--	END IF;
 				
-				WHEN hidden_singles =>
-					IF hidden_singles_done = '1' THEN
-						state <= update_candidates;
-					END IF;
+				--WHEN hidden_singles =>
+				--	IF hidden_singles_done = '1' THEN
+				--		state <= update_candidates;
+				--	END IF;
+				WHEN OTHERS =>
+					state <= idle;
 			END CASE;
 		
 			CASE state IS
 				WHEN update_candidates => solve_control_data <= "001";
 				WHEN singles => solve_control_data <= "010";
 				WHEN hidden_singles => solve_control_data <= "011";
+				WHEN OTHERS => solve_control_data <= "000";
 			END CASE;
 
 		

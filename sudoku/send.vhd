@@ -14,7 +14,10 @@ ENTITY send IS
 
 		spi_write_enable: OUT std_logic;
 		spi_data_send: OUT std_logic_vector(7 downto 0);
-		spi_data_request: IN std_logic
+		spi_data_request: IN std_logic;
+
+    sw_debug: IN std_logic;
+    HEX4: OUT std_logic_vector(6 downto 0)
 	);		
 END ENTITY send;
 
@@ -25,7 +28,6 @@ ARCHITECTURE bhv of send IS
 	SIGNAL fal_edge: std_logic;
 	SIGNAL location: unsigned(11 downto 0);
 	SIGNAL tmp_read_address : unsigned(11 downto 0);
-    SIGNAL debug: std_logic := '0';
 
 BEGIN
 
@@ -43,12 +45,14 @@ BEGIN
 	ELSIF rising_edge(clk) THEN
        spi_data_request_1 <= spi_data_request;
 
-        IF control = "010" AND debug = '0' THEN
+        IF control = "010" AND sw_debug = '0' THEN
+
+        location <= "0000" & to_unsigned(y,4) & to_unsigned(x,4);
+          tmp_read_address <= location;
         
             IF spi_data_request = '1' THEN
 
-                    location <= "0000" & to_unsigned(y,4) & to_unsigned(x,4);
-					tmp_read_address <= location;
+          
 
 					IF stage = '1' THEN
 						spi_data_send <= std_logic_vector(location(7 downto 0));
@@ -82,11 +86,16 @@ BEGIN
                 spi_write_enable <= '0';
             END IF;
 
-        ELSE
+        END IF;
+
+        IF control = "010" and sw_debug = '1' THEN
+
+        location <= to_unsigned(i,4) & to_unsigned(y,4) & to_unsigned(x,4);
+                tmp_read_address <= location;
+
           IF spi_data_request = '1' THEN
 
-                location <= to_unsigned(i,4) & to_unsigned(y,4) & to_unsigned(x,4);
-                tmp_read_address <= location;
+                
 
                 IF stage = '1' THEN
                     spi_data_send <= std_logic_vector(location(7 downto 0));
@@ -128,7 +137,6 @@ BEGIN
               spi_write_enable <= '0';
           END IF;      
 
-
         END IF;
 
     END IF;
@@ -139,6 +147,8 @@ BEGIN
 	
 	mem_read_address <= (OTHERS => 'Z') WHEN control /= "010" 
 		ELSE tmp_read_address;
+
+  HEX4 <= NOT "0111111" WHEN sw_debug = '1' ELSE NOT "0000000";
 
 END bhv;
 

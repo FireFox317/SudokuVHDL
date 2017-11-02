@@ -22,7 +22,8 @@ ENTITY sudoku IS
 
             sw_location: IN unsigned(7 downto 0);
             sw_mode: IN std_logic;
-            HEX0, HEX1, HEX2, HEX5: OUT std_logic_vector(6 downto 0)
+            sw_debug: IN std_logic;
+            HEX0, HEX1, HEX2, HEX4, HEX5: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY sudoku;
 
@@ -71,7 +72,9 @@ ARCHITECTURE bhv of sudoku IS
               
             spi_write_enable: OUT std_logic;
             spi_data_send: OUT std_logic_vector(7 downto 0);
-            spi_data_request: IN std_logic
+            spi_data_request: IN std_logic;
+            sw_debug : IN std_logic;
+            HEX4: OUT std_logic_vector(6 downto 0)
         ); 
     END COMPONENT send;
 
@@ -186,7 +189,9 @@ BEGIN
         
         spi_write_enable => spi_write_enable,
         spi_data_send => spi_data_send,
-        spi_data_request => spi_data_request
+        spi_data_request => spi_data_request,
+        sw_debug => sw_debug,
+        HEX4 => HEX4
         );
 
 
