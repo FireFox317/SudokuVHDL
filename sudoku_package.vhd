@@ -20,3 +20,5 @@ PACKAGE BODY sudoku_package IS
 	END candboard;
 
 END sudoku_package;
+
+--USE sudoku_package.ALL;
