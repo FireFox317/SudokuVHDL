@@ -31,7 +31,7 @@ BEGIN
 		VARIABLE count: integer range 0 to 4096;
 	BEGIN
 		IF reset = '0' THEN
-		
+
 			--if rising_edge(clk) THEN
 			--	if count = 4096 THEN
 			--		count := 0;
