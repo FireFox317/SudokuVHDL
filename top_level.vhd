@@ -14,9 +14,13 @@ ENTITY top_level IS
 
         btn_state: IN std_logic;
         led_state: OUT std_logic_vector(2 downto 0);
+        
+        raspi_receive: IN std_logic;
+        raspi_send: OUT std_logic;
 
         sw_location: IN unsigned(7 downto 0);
-        HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
+        sw_mode: IN std_logic;
+        HEX0, HEX1, HEX2, HEX5: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY top_level;
 
@@ -37,9 +41,13 @@ ARCHITECTURE bhv of top_level IS
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
 
+            raspi_receive: IN std_logic;
+            raspi_send: OUT std_logic;
+
             sw_location: IN unsigned(7 downto 0);
-            HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
-    );         
+            sw_mode: IN std_logic;
+            HEX0, HEX1, HEX2, HEX5: OUT std_logic_vector(6 downto 0)
+    );   
     END COMPONENT sudoku;
 
     COMPONENT spi_slave is
@@ -95,7 +103,11 @@ BEGIN
         sw_location => sw_location,
         HEX0 => HEX0,
         HEX1 => HEX1,
-        HEX2 => HEX2
+        HEX2 => HEX2,
+        HEX5 => HEX5,
+        sw_mode => sw_mode,
+        raspi_send => raspi_send,
+        raspi_receive => raspi_receive
         );
 
     sp_s: spi_slave GENERIC MAP(N => 8) PORT MAP(

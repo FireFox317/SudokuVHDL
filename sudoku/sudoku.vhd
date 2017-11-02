@@ -17,8 +17,12 @@ ENTITY sudoku IS
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
 
+            raspi_receive: IN std_logic;
+            raspi_send: OUT std_logic;
+
             sw_location: IN unsigned(7 downto 0);
-            HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
+            sw_mode: IN std_logic;
+            HEX0, HEX1, HEX2, HEX5: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY sudoku;
 
@@ -33,8 +37,13 @@ ARCHITECTURE bhv of sudoku IS
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
 
-            mem_we : OUT std_logic
-            
+            mem_we : OUT std_logic;
+
+            sw_mode: IN std_logic;
+            raspi_receive: IN std_logic;
+            raspi_send: OUT std_logic;
+
+            HEX5: OUT std_logic_vector(6 downto 0) 
         );     
     END COMPONENT controller;
 
@@ -134,8 +143,12 @@ BEGIN
         btn_state => btn_state,
         led_state => led_state,
 
-        mem_we => we_wire
+        mem_we => we_wire,
+        sw_mode => sw_mode,
+        raspi_receive => raspi_receive,
+        raspi_send => raspi_send,
 
+        HEX5 => HEX5
         );
 
     mem: memory PORT MAP(
