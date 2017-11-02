@@ -1,3 +1,5 @@
+*.sublime-project
+*.sublime-workspace
 */*
 *.bak
 *.qsf
@@ -5,3 +7,4 @@
 *.sdc
 *.qws
 c5_pin_model_dump.txt
+!/sudoku/*

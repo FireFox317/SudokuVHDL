@@ -9,7 +9,7 @@ ENTITY receive IS
 
 		control : IN std_logic_vector(2 downto 0);
 
-		mem_write_address: INOUT unsigned(7 downto 0);
+		mem_write_address: INOUT unsigned(11 downto 0);
 		mem_data_in : INOUT std_logic_vector(3 downto 0);
 		
 		spi_data_valid : IN std_logic;
@@ -22,29 +22,14 @@ ARCHITECTURE bhv of receive IS
 	SIGNAL stage: std_logic := '0';
 	SIGNAL spi_data_valid_1 : std_logic;
 	SIGNAL edge: std_logic;
-	SIGNAL tmp_write_address : unsigned(7 downto 0);
+	SIGNAL tmp_write_address : unsigned(11 downto 0);
 	SIGNAL tmp_data_in : std_logic_vector(3 downto 0);
 
 BEGIN
 
 	PROCESS(clk,reset)
-		VARIABLE count: integer range 0 to 255;
 	BEGIN
 		IF reset = '0' THEN
-			if rising_edge(clk) THEN
-				if count = 255 THEN
-					count := 0;
-				ELSE
-					count := count + 1;
-				END IF;
-
-				
-
-			END IF;
-			
-			tmp_write_address <= to_unsigned(count,8);
-			tmp_data_in <= "0000";
-
 
 			stage <= '0';
 		ELSIF rising_edge(clk) THEN
@@ -52,7 +37,7 @@ BEGIN
 			IF control = "001" THEN
 				IF spi_data_valid = '1' THEN
 					IF stage = '0' THEN
-						tmp_write_address <= unsigned(spi_data_receive);
+						tmp_write_address <= unsigned("0000" & spi_data_receive);
 					ELSE
 						tmp_data_in <= spi_data_receive(3 downto 0);
 					END IF;
@@ -71,9 +56,9 @@ BEGIN
 
 	edge <= NOT spi_data_valid AND spi_data_valid_1;
 
-	mem_write_address <= "ZZZZZZZZ" WHEN control /= "001" 
+	mem_write_address <= (OTHERS => 'Z') WHEN control /= "001" 
 		ELSE tmp_write_address;
 
-	mem_data_in <= "ZZZZ" WHEN control /= "001" 
+	mem_data_in <= (OTHERS => 'Z') WHEN control /= "001" 
 		ELSE tmp_data_in;
 END bhv;

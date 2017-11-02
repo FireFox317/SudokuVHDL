@@ -6,8 +6,8 @@ ENTITY memory IS
 	PORT (
 		clk: IN std_logic;
 		data: IN std_logic_vector(3 downto 0);
-		write_address: IN unsigned(7 downto 0);
-		read_address: IN unsigned(7 downto 0);
+		write_address: IN unsigned(11 downto 0);
+		read_address: IN unsigned(11 downto 0);
 		we: IN std_logic;
 		q: OUT std_logic_vector(3 downto 0)
 	);
@@ -15,7 +15,7 @@ END ENTITY memory;
 
 ARCHITECTURE bhv of memory IS
 
-	TYPE mem IS ARRAY(0 TO 255) OF std_logic_vector(3 downto 0);
+	TYPE mem IS ARRAY(0 TO 4096) OF std_logic_vector(3 downto 0);
 	SIGNAL ram_block : mem;
 
 BEGIN
