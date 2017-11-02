@@ -25,8 +25,9 @@ ARCHITECTURE bhv OF update_candidates IS
 
 	SIGNAL x: integer range 1 to 10 := 1;
 	SIGNAL y: integer range 1 to 10 := 1;
+	SIGNAL i: integer range 0 to 11 := 1;
 
-	SIGNAL flag: std_logic;
+	SIGNAL stage: integer range 0 to 2 := 0;
 
 
 	
@@ -57,28 +58,61 @@ BEGIN
 		IF reset = '0' THEN
 
 		ELSIF rising_edge(clk) THEN
-
-		
-
 			IF solve_control_data = "010" THEN
 				update_candidates_done <= '0';
-
 			ELSIF solve_control_data = "001" THEN
 			
 				IF first_candidate_initialise = '0' THEN
+					IF stage = 0 THEN
+						-- segment assigment
+	                	IF x < 10 THEN
+							if y < 10 THEN
+								tmp_write_address <= address(x,y,11);
+								tmp_data_in <= std_logic_vector(to_unsigned(seg_assign(x,y),4));
 
-                	IF x < 10 THEN
-						if y < 10 THEN
-							tmp_write_address <= address(x,y,11);
-							tmp_data_in <= std_logic_vector(to_unsigned(seg_assign(x,y),4));
-
-							y <= y + 1;
-						END IF;
-						IF y = 10 THEN
-							x <= x + 1;
+								y <= y + 1;
+							END IF;
+							IF y = 10 THEN
+								x <= x + 1;
+								y <= 1;
+							END IF;
+						ELSE
+							stage <= 1;
+							x <= 1;
 							y <= 1;
 						END IF;
+					ELSIF stage = 1 THEN
+						-- other thing
+						IF x < 10 THEN
+							IF y < 10 THEN
+								tmp_read_address <= address(x,y,0);
+								IF mem_data_out = "0000" THEN
+									IF i < 10 THEN
+										tmp_write_address <= address(x,y,i);
+										tmp_data_in <= std_logic_vector(to_unsigned(i,4));
+
+										i <= i + 1;
+									ELSE
+										y <= y + 1;
+									END IF;
+								END IF;
+								IF y = 10 THEN
+									x <= x + 1;
+									y <= 1;
+								END IF;
+							END IF;
+						ELSE
+							x <= 1;
+							y <= 1;
+							i <= 0;
+							stage <= 3;
+						END IF;
+
+					ELSIF stage = 3 THEN
+
 					END IF;
+
+
 				
 				END IF;
 
@@ -121,8 +155,8 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-	--mem_read_address <= (OTHERS => 'Z') WHEN solve_control_data /= "001" 
-	--	ELSE tmp_read_address;
+	mem_read_address <= (OTHERS => 'Z') WHEN solve_control_data /= "001" 
+		ELSE tmp_read_address;
 
 	mem_write_address <= (OTHERS => 'Z') WHEN solve_control_data /= "001" 
 		ELSE tmp_write_address;
