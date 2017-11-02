@@ -30,7 +30,6 @@ ARCHITECTURE bhv OF solving IS
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
 		mem_write_address: OUT unsigned(11 downto 0);
-		mem_write_enable: OUT std_logic;
 		mem_data_in : OUT std_logic_vector(3 downto 0)	
 		);
 	END COMPONENT update_candidates;
@@ -47,7 +46,6 @@ ARCHITECTURE bhv OF solving IS
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
 		mem_write_address: OUT unsigned(11 downto 0);
-		mem_write_enable: OUT std_logic;
 		mem_data_in : OUT std_logic_vector(3 downto 0)	
 
 		);
@@ -65,7 +63,6 @@ ARCHITECTURE bhv OF solving IS
 			mem_data_out: IN std_logic_vector(3 downto 0);
 
 			mem_write_address: OUT unsigned(11 downto 0);
-			mem_write_enable: OUT std_logic;
 			mem_data_in : OUT std_logic_vector(3 downto 0)	
 		);
 	END COMPONENT hidden_singles;
@@ -92,8 +89,8 @@ ARCHITECTURE bhv OF solving IS
 	SIGNAL singles_failed_wire: std_logic;
 	SIGNAL hidden_singles_failed_wire: std_logic;
 
-	SIGNAL tmp_read_address : unsigned(7 downto 0);
-	SIGNAL tmp_write_address : unsigned(7 downto 0);
+	SIGNAL tmp_read_address : unsigned(11 downto 0);
+	SIGNAL tmp_write_address : unsigned(11 downto 0);
 	SIGNAL tmp_data_in : std_logic_vector(3 downto 0);
 
 
@@ -107,7 +104,6 @@ BEGIN
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
 		mem_write_address => tmp_write_address,
-		mem_write_enable => tmp_write_enable,
 		mem_data_in => tmp_data_in
 	);
 	
@@ -120,7 +116,6 @@ BEGIN
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
 		mem_write_address => tmp_write_address,
-		mem_write_enable => tmp_write_enable,
 		mem_data_in => tmp_data_in
 		
 		
@@ -135,7 +130,6 @@ BEGIN
 		mem_read_address => mem_read_address,
 		mem_data_out => mem_data_out,
 		mem_write_address => tmp_write_address,
-		mem_write_enable => tmp_write_enable,
 		mem_data_in => tmp_data_in
 		
 	);

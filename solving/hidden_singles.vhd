@@ -1,6 +1,8 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
-USE sudoku_package.ALL;
+USE IEEE.numeric_std.ALL;
+LIBRARY sudokuvhdl;
+USE sudokuvhdl.sudoku_package.ALL;
 
 ENTITY hidden_singles IS
 	PORT (
@@ -10,10 +12,10 @@ ENTITY hidden_singles IS
 		hidden_singles_done: OUT std_logic;
 		hidden_singles_failed : OUT std_logic;
 		
-		mem_read_address: OUT integer range 0 to 255;
+		mem_read_address: OUT unsigned(11 downto 0);
 		mem_data_out: IN std_logic_vector(3 downto 0);
 
-		mem_store_address: OUT integer range 0 to 255;
+		mem_write_address: OUT unsigned(11 downto 0);
 		mem_write_enable: OUT std_logic;
 		mem_data_in : OUT std_logic_vector(3 downto 0)	
 		);
@@ -31,11 +33,6 @@ ARCHITECTURE bhv OF hidden_singles IS
 -- hsa(i,2) is the x value of the latest candidate of value (i)
 -- hsa(i,3) is the y value of the latest candidate	of value (i)
 	VARIABLE seg : natural range 1 to 9;
-	
-	
-	TYPE candidatesudoku IS ARRAY (1 TO 9, 1 TO 9, 0 TO 11) OF natural range 0 to 9; -- array type for possible candidates.
-	SIGNAL candboard : candidatesudoku;
-
 
 BEGIN
 
@@ -70,9 +67,9 @@ BEGIN
 			END LOOP;
 			FOR I IN 1 to 9 LOOP
 				IF hsa(I,1) = 1 THEN
-					candboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
-					candboard(hsa(I,2),hsa(I,3),I,0);
-					candboard(hsa(I,2),hsa(I,3),10,0);
+					wcandboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
+					wcandboard(hsa(I,2),hsa(I,3),I,0);
+					wcandboard(hsa(I,2),hsa(I,3),10,0);
 					hidden_singles_failed <= '0';
 				END IF;
 			END LOOP;
@@ -98,9 +95,9 @@ BEGIN
 			END LOOP;
 			FOR I IN 1 to 9 LOOP
 				IF hsa(I,1) = 1 THEN
-					candboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
-					candboard(hsa(I,2),hsa(I,3),I,0);
-					candboard(hsa(I,2),hsa(I,3),10,0);
+					wcandboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
+					wcandboard(hsa(I,2),hsa(I,3),I,0);
+					wcandboard(hsa(I,2),hsa(I,3),10,0);
 					hidden_singles_failed <= '0';
 				END IF;
 			END LOOP;
@@ -130,9 +127,9 @@ BEGIN
 				END LOOP;
 				FOR I IN 1 to 9 LOOP
 					IF hsa(I,1) = 1 THEN
-						candboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
-						candboard(hsa(I,2),hsa(I,3),I,0);
-						candboard(hsa(I,2),hsa(I,3),10,0);
+						wcandboard(hsa(I,2),hsa(I,3),0,hsa(I,1));
+						wcandboard(hsa(I,2),hsa(I,3),I,0);
+						wcandboard(hsa(I,2),hsa(I,3),10,0);
 						hidden_singles_failed <= '0';
 					END IF;
 				END LOOP;
@@ -142,13 +139,13 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-	mem_read_address <= (OTHERS => 'Z') WHEN control /= "011" 
+	mem_read_address <= (OTHERS => 'Z') WHEN solve_control_data /= "011" 
 		ELSE tmp_read_address;
 
-	mem_write_address <= (OTHERS => 'Z') WHEN control /= "011" 
+	mem_write_address <= (OTHERS => 'Z') WHEN solve_control_data /= "011" 
 		ELSE tmp_write_address;
 		
-	mem_data_in <= (OTHERS => 'Z') WHEN control /= "011" 
+	mem_data_in <= (OTHERS => 'Z') WHEN solve_control_data /= "011" 
 		ELSE tmp_data_in;
 
 END bhv;
