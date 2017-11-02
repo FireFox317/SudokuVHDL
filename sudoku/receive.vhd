@@ -31,16 +31,17 @@ BEGIN
 		VARIABLE count: integer range 0 to 4096;
 	BEGIN
 		IF reset = '0' THEN
-			if rising_edge(clk) THEN
-				if count = 4096 THEN
-					count := 0;
-				ELSE
-					count := count + 1;
-				END IF;
-			END IF;
+		
+			--if rising_edge(clk) THEN
+			--	if count = 4096 THEN
+			--		count := 0;
+			--	ELSE
+			--		count := count + 1;
+			--	END IF;
+			--END IF;
 			
-			tmp_write_address <= to_unsigned(count,12);
-			tmp_data_in <= "0000";
+			--tmp_write_address <= to_unsigned(count,12);
+			--tmp_data_in <= "0000";
 
 			stage <= '0';
 		ELSIF rising_edge(clk) THEN
