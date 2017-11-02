@@ -1,5 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
+USE sudoku_package.ALL;
 
 ENTITY singles IS
 	PORT (
@@ -44,9 +45,9 @@ BEGIN
 				IF (candboard(x,y,0) = 0 and candboard(x,y,10) = 1) THEN -- unique solution found
 					FOR I IN 1 to 9 LOOP
 						IF candboard(x,y,I) /= 0 THEN
-							candboard(x,y,0) <= candboard(x,y,I);
-							candboard(x,y,I) <= 0;
-							candboard(x,y,10) <= 0;
+							wcandboard(x,y,0,candboard(x,y,I));
+							candboard(x,y,I,0);
+							candboard(x,y,10,0);
 						END IF;
 					END LOOP;
 					singles_failed <= '0';
