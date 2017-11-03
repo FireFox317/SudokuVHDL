@@ -29,15 +29,29 @@ ARCHITECTURE bhv OF singles IS
 
 	SIGNAL x,y : integer RANGE 1 to 10 := 1;
 	SIGNAL i : integer RANGE 0 to 12 := 0;
-	SIGNAL count : integer RANGE 0 to 3 := 0;
-	SIGNAL cnt : std_logic := '0';
+	SIGNAL count : integer RANGE 0 to 4 := 0;
+	SIGNAL cont : std_logic := '0';
 
+	FUNCTION address(x: integer; y: integer; i: integer) return unsigned IS
+	BEGIN
+		return (to_unsigned(i,4) & to_unsigned(y-1,4) & to_unsigned(x-1,4));
+	END address;
+
+	FUNCTION data(val: integer) return std_logic_vector IS
+	BEGIN
+		return std_logic_vector(to_unsigned(val,4));
+	END data;
 
 BEGIN
 
 	PROCESS(clk,reset)
 	BEGIN
-		IF rising_edge(clk) THEN
+		IF reset = '0' THEN
+			x <= 1; y <= 1;
+			i <= 0;
+			count <= 0;
+			cont <= '0';
+		ELSIF rising_edge(clk) THEN
 			IF solve_control_data = "001" THEN
 				singles_done <= '0';
 			ELSIF solve_control_data = "010" THEN
@@ -56,7 +70,7 @@ BEGIN
 										IF i < 10 THEN
 											tmp_read_address <= address(x,y,i);
 											IF mem_data_out /= "0000" THEN
-												CASE count < 3 IS
+												CASE count IS
 													WHEN 0 => null;
 													WHEN 1 =>--wcandboard(x,y,0,candboard(x,y,I,mem_data_out));
 															tmp_write_address <= address(x,y,0);

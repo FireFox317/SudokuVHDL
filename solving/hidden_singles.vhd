@@ -36,23 +36,34 @@ ARCHITECTURE bhv OF hidden_singles IS
 	SIGNAL x,y : integer RANGE 1 to 10 := 1;
 	SIGNAL i : integer RANGE 0 to 12 := 0;
 	SIGNAL count : integer RANGE 0 to 3 := 0;
-	SIGNAL cnt,done : std_logic := '0';
+	SIGNAL ctrl : integer RANGE 0 to 7 := 0;
+	SIGNAL cont,done : std_logic := '0';
+	
+	FUNCTION address(x: integer; y: integer; i: integer) return unsigned IS
+	BEGIN
+		return (to_unsigned(i,4) & to_unsigned(y-1,4) & to_unsigned(x-1,4));
+	END address;
 
-	PROCEDURE rsthsa(null) IS
+	FUNCTION data(val: integer) return std_logic_vector IS
+	BEGIN
+		return std_logic_vector(to_unsigned(val,4));
+	END data;
+
+	PROCEDURE rsthsa IS
 		VARIABLE a,b : integer RANGE 1 to 10 := 1;
 	BEGIN
 		IF a < 10 THEN
 			IF b < 10 THEN
 				hsa(a,b) <= 0;
-				b <= b + 1;
+				b := b + 1;
 			END IF;
 			IF b = 10 THEN
-				a <= a + 1;
-				b <= 0;
+				a := a + 1;
+				b := 0;
 			END IF;
 		END IF;
-		IF a = 10;
-			a <= 0;
+		IF a = 10 THEN
+			a := 0;
 		END IF;
 	END rsthsa;
 
@@ -64,6 +75,11 @@ BEGIN
 		IF reset = '0' THEN
 			hidden_singles_done <= '0';
 			hidden_singles_failed <= '1';
+			x <= 1; y <= 1;
+			i <= 0;
+			count <= 0;
+			ctrl <= 0;
+			cont <= '0'; done <= '0';
 		ELSIF rising_edge(clk) THEN
 			IF solve_control_data = "001" THEN
 				hidden_singles_done <= '0';
@@ -72,7 +88,7 @@ BEGIN
 				CASE ctrl IS
 					WHEN 0 =>	hidden_singles_done <= '0';
 								hidden_singles_failed <= '1';
-								rsthsa();
+								rsthsa;
 
 					WHEN 1 =>	IF x < 10 THEN
 									IF y < 10 THEN
@@ -110,7 +126,7 @@ BEGIN
 									END IF;
 								END IF;
 								IF x = 10 THEN
-									x => 0;
+									x <= 1;
 									done <= '1';
 								END IF;
 
@@ -119,22 +135,22 @@ BEGIN
 										CASE count IS
 											WHEN 0 =>--wcandboard(hsa(i,2),hsa(i,3),0,hsa(i,1));
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),0);
-													tmp_data_in <= hsa(i,1)
+													tmp_data_in <= data(hsa(i,1));
 											WHEN 1 =>--wcandboard(hsa(i,2),hsa(i,3),i,0);
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),i);
-													tmp_data_in <= "0000"
+													tmp_data_in <= "0000";
 											WHEN 2 =>--wcandboard(hsa(i,2),hsa(i,3),10,0);
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),10);
-													tmp_data_in <= "0000"
+													tmp_data_in <= "0000";
 											WHEN OTHERS => null;
 											hidden_singles_failed <= '0';
 										END CASE;
 									END IF;
 								END IF;
 								IF i = 10 THEN
-									i => 0;
+									i <= 0;
 									done <= '1';
-									rsthsa();
+									rsthsa;
 								END IF;
 
 					WHEN 3 =>	IF y < 10 THEN
@@ -173,7 +189,7 @@ BEGIN
 									END IF;
 								END IF;
 								IF y = 10 THEN
-									y => 0;
+									y <= 1;
 									done <= '1';
 								END IF;
 
@@ -182,28 +198,28 @@ BEGIN
 										CASE count IS
 											WHEN 0 =>--wcandboard(hsa(i,2),hsa(i,3),0,hsa(i,1));
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),0);
-													tmp_data_in <= hsa(i,1)
+													tmp_data_in <= data(hsa(i,1));
 											WHEN 1 =>--wcandboard(hsa(i,2),hsa(i,3),i,0);
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),i);
-													tmp_data_in <= "0000"
+													tmp_data_in <= "0000";
 											WHEN 2 =>--wcandboard(hsa(i,2),hsa(i,3),10,0);
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),10);
-													tmp_data_in <= "0000"
+													tmp_data_in <= "0000";
 											WHEN OTHERS => null;
 											hidden_singles_failed <= '0';
 										END CASE;
 									END IF;
 								END IF;
 								IF i = 10 THEN
-									i => 0;
+									i <= 0;
 									done <= '1';
-									rsthsa();
+									rsthsa;
 									seg := 1;
 								END IF;
 
 					WHEN 5 =>	IF x < 10 THEN
 									IF y < 10 THEN
-										tmp_read_address <= address(x,y,11)
+										tmp_read_address <= address(x,y,11);
 										IF mem_data_out = data(seg) THEN
 											cont <= '1';
 											IF cont = '1' THEN
@@ -244,7 +260,7 @@ BEGIN
 									END IF;
 								END IF;
 								IF x = 10 THEN
-									x => 0;
+									x <= 1;
 									done <= '1';
 								END IF;
 
@@ -253,29 +269,29 @@ BEGIN
 										CASE count IS
 											WHEN 0 =>--wcandboard(hsa(i,2),hsa(i,3),0,hsa(i,1));
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),0);
-													tmp_data_in <= hsa(i,1)
+													tmp_data_in <= data(hsa(i,1));
 											WHEN 1 =>--wcandboard(hsa(i,2),hsa(i,3),i,0);
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),i);
-													tmp_data_in <= "0000"
+													tmp_data_in <= "0000";
 											WHEN 2 =>--wcandboard(hsa(i,2),hsa(i,3),10,0);
 													tmp_write_address <= address(hsa(i,2),hsa(i,3),10);
-													tmp_data_in <= "0000"
+													tmp_data_in <= "0000";
 											WHEN OTHERS => null;
 											hidden_singles_failed <= '0';
 										END CASE;
 									END IF;
 								END IF;
 								IF i = 10 THEN
-									i => 0;
+									i <= 0;
 									done <= '1';
 									seg := seg + 1;									
-									rsthsa();
+									rsthsa;
 								END IF;
-					WHEN OTHERS => done <= '1'; ctrl <= '0';
+					WHEN OTHERS => done <= '1'; ctrl <= 0;
 				END CASE;
 				IF done = '1' THEN
 					ctrl <= ctrl + 1;
-					done <= 0;
+					done <= '0';
 				END IF;
 				hidden_singles_done <= '1';
 			END IF;
