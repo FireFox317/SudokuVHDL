@@ -55,7 +55,7 @@ BEGIN
 										cont <= '0';
 										IF i < 10 THEN
 											tmp_read_address <= address(x,y,i);
-											IF mem_data_out) /= "0000" THEN
+											IF mem_data_out /= "0000" THEN
 												CASE count < 3 IS
 													WHEN 0 => null;
 													WHEN 1 =>--wcandboard(x,y,0,candboard(x,y,I,mem_data_out));
