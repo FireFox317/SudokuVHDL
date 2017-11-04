@@ -6,14 +6,14 @@ ENTITY multiplexer IS
   PORT (
        	control : IN std_logic_vector(2 downto 0);
 
-       	mem_read_address: OUT integer range 0 to 255;
-       	show_mem_read_address: IN integer range 0 to 255;
-       	send_mem_read_address: IN integer range 0 to 255;
-       	solve_mem_read_address: IN integer range 0 to 255;
+       	mem_read_address: OUT integer range 0 to 4095;
+       	show_mem_read_address: IN integer range 0 to 4095;
+       	send_mem_read_address: IN integer range 0 to 4095;
+       	solve_mem_read_address: IN integer range 0 to 4095;
 
-       	mem_store_address: OUT integer range 0 to 255;
-       	solve_mem_store_address: IN integer range 0 to 255;
-       	receive_mem_store_address: IN integer range 0 to 255;
+       	mem_write_address: OUT integer range 0 to 4095;
+       	solve_mem_write_address: IN integer range 0 to 4095;
+       	receive_mem_write_address: IN integer range 0 to 4095;
 
        	mem_write_enable: OUT std_logic;
        	solve_mem_write_enable: IN std_logic;
@@ -42,8 +42,8 @@ mem_data_in <= solve_mem_data_in WHEN control = "011"
                     ELSE receive_mem_data_in;
 
 
-mem_store_address <= solve_mem_store_address WHEN control = "011"  
-                        ELSE receive_mem_store_address;
+mem_write_address <= solve_mem_write_address WHEN control = "011"  
+                        ELSE receive_mem_write_address;
 
 mem_write_enable <= solve_mem_write_enable WHEN control = "011" 
                             ELSE receive_mem_write_enable;

@@ -9,7 +9,7 @@ ENTITY receive IS
 
        	control : IN std_logic_vector(2 downto 0);
 
-       	mem_store_address: OUT integer range 0 to 255;
+       	mem_write_address: OUT integer range 0 to 4095;
        	mem_write_enable : OUT std_logic;
        	mem_data_in : OUT std_logic_vector(3 downto 0); 
 			
@@ -39,7 +39,7 @@ BEGIN
 				mem_write_enable <= '1';
 				IF spi_data_valid = '1' THEN
 					IF stage = '0' THEN
-						mem_store_address <= to_integer(unsigned(spi_data_receive));
+						mem_write_address <= to_integer(unsigned("0000" & spi_data_receive));
 						
 					ELSE
 						mem_data_in <= spi_data_receive(3 downto 0);
@@ -64,6 +64,6 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-edge <= NOT spi_data_valid_1 AND spi_data_valid;
+edge <= NOT spi_data_valid AND spi_data_valid_1;
 
 END bhv;

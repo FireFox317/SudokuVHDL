@@ -9,7 +9,7 @@ ENTITY show IS
 
        	control : IN std_logic_vector(2 downto 0);
 
-       	mem_read_address: OUT integer range 0 to 255;
+       	mem_read_address: OUT integer range 0 to 4095;
        	mem_data_out: IN std_logic_vector(3 downto 0);
 
        	sw_location: IN unsigned(7 downto 0);
@@ -55,7 +55,7 @@ BEGIN
 		ELSIF rising_edge(clk) THEN
 
 			IF control = "100" THEN
-				mem_read_address <= to_integer(sw_location);
+				mem_read_address <= to_integer("0000" & sw_location(3 DOWNTO 0) & sw_location(7 downto 4));
 				HEX0 <= hex2display(mem_data_out);
 				HEX1 <= hex2display(std_logic_vector(sw_location(3 downto 0)));
 				HEX2 <= hex2display(std_logic_vector(sw_location(7 downto 4)));

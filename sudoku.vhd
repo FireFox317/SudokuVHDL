@@ -16,6 +16,7 @@ ENTITY sudoku IS
 
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
+            sw_debug: IN std_logic;
 
             sw_location: IN unsigned(7 downto 0);
             HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
@@ -31,7 +32,9 @@ ARCHITECTURE bhv of sudoku IS
 
         control : IN std_logic_vector(2 downto 0);
 
-        mem_read_address: OUT integer range 0 to 255;
+        sw_debug: IN std_logic;
+
+        mem_read_address: OUT integer range 0 to 4095;
         mem_data_out: IN std_logic_vector(3 downto 0);
           
         spi_write_enable: OUT std_logic;
@@ -47,7 +50,7 @@ ARCHITECTURE bhv of sudoku IS
 
                 control : IN std_logic_vector(2 downto 0);
 
-                mem_store_address: OUT integer range 0 to 255;
+                mem_write_address: OUT integer range 0 to 4095;
                 mem_write_enable : OUT std_logic;
                 mem_data_in : OUT std_logic_vector(3 downto 0); 
                     
@@ -73,8 +76,8 @@ ARCHITECTURE bhv of sudoku IS
         PORT(
             clk: IN std_logic;
             data: IN std_logic_vector(3 downto 0);
-            write_address: IN integer RANGE 0 to 255;
-            read_address: IN integer RANGE 0 to 255;
+            write_address: IN integer RANGE 0 to 4095;
+            read_address: IN integer RANGE 0 to 4095;
             we: IN std_logic;
             q: OUT std_logic_vector(3 downto 0)
         );
@@ -87,7 +90,7 @@ ARCHITECTURE bhv of sudoku IS
 
             control : IN std_logic_vector(2 downto 0);
 
-            mem_read_address: OUT integer range 0 to 255;
+            mem_read_address: OUT integer range 0 to 4095;
             mem_data_out: IN std_logic_vector(3 downto 0);
 
             sw_location: IN unsigned(7 downto 0);
@@ -103,10 +106,10 @@ ARCHITECTURE bhv of sudoku IS
 
             control: IN std_logic_vector(2 downto 0);
 
-            mem_read_address: OUT integer range 0 to 255;
+            mem_read_address: OUT integer range 0 to 4095;
             mem_data_out: IN std_logic_vector(3 downto 0);
 
-            mem_store_address: OUT integer range 0 to 255;
+            mem_write_address: OUT integer range 0 to 4095;
             mem_write_enable: OUT std_logic;
             mem_data_in : OUT std_logic_vector(3 downto 0)
 
@@ -117,14 +120,14 @@ ARCHITECTURE bhv of sudoku IS
       PORT (
             control : IN std_logic_vector(2 downto 0);
 
-            mem_read_address: OUT integer range 0 to 255;
-            show_mem_read_address: IN integer range 0 to 255;
-            send_mem_read_address: IN integer range 0 to 255;
-            solve_mem_read_address: IN integer range 0 to 255;
+            mem_read_address: OUT integer range 0 to 4095;
+            show_mem_read_address: IN integer range 0 to 4095;
+            send_mem_read_address: IN integer range 0 to 4095;
+            solve_mem_read_address: IN integer range 0 to 4095;
 
-            mem_store_address: OUT integer range 0 to 255;
-            solve_mem_store_address: IN integer range 0 to 255;
-            receive_mem_store_address: IN integer range 0 to 255;
+            mem_write_address: OUT integer range 0 to 4095;
+            solve_mem_write_address: IN integer range 0 to 4095;
+            receive_mem_write_address: IN integer range 0 to 4095;
 
             mem_write_enable: OUT std_logic;
             solve_mem_write_enable: IN std_logic;
@@ -151,15 +154,15 @@ SIGNAL mem_data_out_wire: std_logic_vector(3 downto 0);
 
 
 
-SIGNAL mem_read_address_wire: integer range 0 to 255;
-SIGNAL send_mem_read_address_wire: integer range 0 to 255;
-SIGNAL show_mem_read_address_wire: integer range 0 to 255;
-SIGNAL solve_mem_read_address_wire: integer range 0 to 255;
+SIGNAL mem_read_address_wire: integer range 0 to 4095;
+SIGNAL send_mem_read_address_wire: integer range 0 to 4095;
+SIGNAL show_mem_read_address_wire: integer range 0 to 4095;
+SIGNAL solve_mem_read_address_wire: integer range 0 to 4095;
 
 
-SIGNAL mem_store_address_wire: integer range 0 to 255;
-SIGNAL solve_mem_store_address_wire: integer range 0 to 255;
-SIGNAL receive_mem_store_address_wire: integer range 0 to 255;
+SIGNAL mem_write_address_wire: integer range 0 to 4095;
+SIGNAL solve_mem_write_address_wire: integer range 0 to 4095;
+SIGNAL receive_mem_write_address_wire: integer range 0 to 4095;
 
 
 SIGNAL mem_write_enable_wire: std_logic;
@@ -179,7 +182,7 @@ BEGIN
         mem_read_address => solve_mem_read_address_wire,
         mem_data_out => mem_data_out_wire,
 
-        mem_store_address => solve_mem_store_address_wire,
+        mem_write_address => solve_mem_write_address_wire,
         mem_write_enable => solve_mem_write_enable_wire,
         mem_data_in => solve_mem_data_in_wire
 
@@ -193,6 +196,7 @@ BEGIN
         control => control_wire,
         mem_read_address => send_mem_read_address_wire,
         mem_data_out => mem_data_out_wire,
+        sw_debug => sw_debug,
         spi_write_enable => spi_write_enable,
         spi_data_send => spi_data_send,
         spi_data_request => spi_data_request
@@ -203,7 +207,7 @@ BEGIN
         clk => clk,
         reset => reset,
         control => control_wire,
-        mem_store_address => receive_mem_store_address_wire,
+        mem_write_address => receive_mem_write_address_wire,
         mem_write_enable => receive_mem_write_enable_wire,
         mem_data_in => receive_mem_data_in_wire,
         spi_data_valid => spi_data_valid,
@@ -221,7 +225,7 @@ BEGIN
     mem: memory PORT MAP(
         clk => clk,
         data => mem_data_in_wire,
-        write_address => mem_store_address_wire,
+        write_address => mem_write_address_wire,
         read_address => mem_read_address_wire,
         we => mem_write_enable_wire,
         q => mem_data_out_wire
@@ -247,9 +251,9 @@ BEGIN
         send_mem_read_address =>  send_mem_read_address_wire,
         solve_mem_read_address =>  solve_mem_read_address_wire,
 
-        mem_store_address => mem_store_address_wire,
-        solve_mem_store_address => solve_mem_store_address_wire,
-        receive_mem_store_address => receive_mem_store_address_wire,
+        mem_write_address => mem_write_address_wire,
+        solve_mem_write_address => solve_mem_write_address_wire,
+        receive_mem_write_address => receive_mem_write_address_wire,
 
         mem_write_enable => mem_write_enable_wire,
         solve_mem_write_enable => solve_mem_write_enable_wire,

@@ -14,6 +14,7 @@ ENTITY top_level IS
 
         btn_state: IN std_logic;
         led_state: OUT std_logic_vector(2 downto 0);
+        sw_debug: IN std_logic;
 
         sw_location: IN unsigned(7 downto 0);
         HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
@@ -36,6 +37,7 @@ ARCHITECTURE bhv of top_level IS
 
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
+            sw_debug: IN std_logic;
 
             sw_location: IN unsigned(7 downto 0);
             HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
@@ -93,6 +95,7 @@ BEGIN
         btn_state => btn_state,
         led_state => led_state,
         sw_location => sw_location,
+        sw_debug => sw_debug,
         HEX0 => HEX0,
         HEX1 => HEX1,
         HEX2 => HEX2
