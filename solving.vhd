@@ -48,16 +48,21 @@ ARCHITECTURE bhv of solving IS
 	SIGNAL stage: integer range 0 to 2;
 	SIGNAL wacht: std_logic;
 	SIGNAL check_value: std_logic;
+			SIGNAL count: integer range 0 to 3;
+	SIGNAL set_candidates: std_logic;
+
 	
 
 BEGIN
 PROCESS(clk,reset)
-	VARIABLE set_candidates: std_logic;
+
 BEGIN
     IF reset = '0' THEN
     	x <= 0;
     	y <= 0;
     	i <= 0;
+    	count <= 0;
+    	set_candidates <= '0';
     	first_candidate_initialise <= '0';
     	stage <= 0;
 	ELSIF rising_edge(clk) THEN
@@ -74,7 +79,7 @@ BEGIN
 		        			mem_data_in <= data(seg_assign(x,y));
 		        			x <= x + 1;
 		        		END IF;
-		        		IF x = 9 THEN
+		        		IF x = 8 THEN
 		        			y <= y + 1;
 		        			x <= 0;
 		        		END IF;
@@ -85,27 +90,64 @@ BEGIN
 		        		stage <= 1;
 		        		mem_write_enable <= '0';
 		        	END IF;
+
 		        ELSE
 		        	mem_write_enable <= '1';
 
+		        	IF count /= 2 THEN
+		        		count <= count + 1;
+		        	END IF;
+
+		        	IF count = 0 THEN
+		        		mem_read_address <= address(x,y,0);
+		        		
+		        	ELSIF count = 1 THEN
+		        		IF mem_data_out = "0000" THEN
+		        			set_candidates <= '1';
+		        			
+		        		ELSE
+		        			set_candidates <= '0';
+		        		
+		        		END IF;
+		        	ELSIF count = 3 THEN
+		        		x <= x + 1;
+		        	END IF;
+
 		        	IF y < 9 THEN
 		        		IF x < 9 THEN
-		        			IF i < 11 THEN
-			        				mem_write_address <= address(x,y,i);
-			        				IF i = 10 THEN
-				        				mem_data_in <= data(9);
-				        			ELSE
-				        				mem_data_in <= data(i);
-			        				END IF;
-			        				i <= i + 1;
-		        			ELSE
-		        				x <= x + 1;
-		        				i <= 1;
+		        			IF set_candidates = '1' AND count = 2 THEN
+			        			IF i < 11 THEN
+			        					IF x = 0 THEN
+			        						mem_write_address <= address(8,y,i);
+			        					ELSE
+			        						mem_write_address <= address(x-1,y,i);
+			        					END IF;
+			        					
+				        				IF i = 10 THEN
+					        				mem_data_in <= data(9);
+					        			ELSE
+					        				mem_data_in <= data(i);
+				        				END IF;
+				        				i <= i + 1;
+			        			ELSE
+			        				i <= 1;
+			        				count <= 3;
+			        				set_candidates <= '0';
+			        			END IF;
+			        		ELSIF set_candidates = '0' AND count = 2 THEN
+			        				i <= 1;
+			        				
+			        				count <= 3;
+			        				set_candidates <= '0';
 		        			END IF;
 		        		END IF;
-		        		IF x = 9 THEN
+		        		IF x = 8 AND count = 2 THEN
 		        			x <= 0;
 		        			y <= y + 1;
+		        			
+		        			i <= 1;
+        					count <= 0;
+	        				set_candidates <= '0';
 		        		END IF;
 		        	ELSE
 		        		x <= 0;
