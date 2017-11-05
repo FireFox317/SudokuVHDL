@@ -50,7 +50,7 @@ ARCHITECTURE bhv of solving IS
 	SIGNAL check_value: std_logic;
 			SIGNAL count: integer range 0 to 3;
 	SIGNAL set_candidates: std_logic;
-
+	SIGNAL value: std_logic_vector(3 downto 0);
 	
 
 BEGIN
@@ -58,10 +58,15 @@ PROCESS(clk,reset)
 
 BEGIN
     IF reset = '0' THEN
+    	mem_write_enable <= '0';
+    	mem_write_address <= address(0,0,0);
+    	mem_read_address <= address(0,0,0);
+    	mem_data_in <= data(0);
     	x <= 0;
     	y <= 0;
     	i <= 0;
     	count <= 0;
+    	value <= "0000";
     	set_candidates <= '0';
     	first_candidate_initialise <= '0';
     	stage <= 0;
@@ -73,23 +78,25 @@ BEGIN
         	IF first_candidate_initialise = '0' THEN
         		IF stage = 0 THEN
 	        		mem_write_enable <= '1';
-		        	IF y < 9 THEN
-		        		IF x < 9 THEN
-		        			mem_write_address <= address(x,y,11);
-		        			mem_data_in <= data(seg_assign(x,y));
-		        			x <= x + 1;
-		        		END IF;
-		        		IF x = 8 THEN
-		        			y <= y + 1;
-		        			x <= 0;
-		        		END IF;
-		        	ELSE
-		        		x <= 0;
-		        		y <= 0;
-		        		i <= 1;
-		        		stage <= 1;
-		        		mem_write_enable <= '0';
-		        	END IF;
+
+	        		mem_write_address <= address(x,y,11);
+		        	mem_data_in <= data(seg_assign(x,y));	
+
+	        		IF x = 9 THEN
+                        x <= 0;
+                        y <= y + 1;
+                    ELSE
+                        x <= x + 1;
+                    END IF;
+
+                    IF y = 9 THEN
+                        y <= 0;
+                        x <= 0;
+                        i <= 1;
+                        value <= "1111";
+                        stage <= 1;
+                        mem_write_enable <= '0';
+                    END IF;
 
 		        ELSE
 		        	mem_write_enable <= '1';
@@ -158,6 +165,7 @@ BEGIN
 		        END IF;
 
 	        ELSE
+
 	        	mem_write_enable <= '0';
 	        END IF;
            
