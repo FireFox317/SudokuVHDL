@@ -35,6 +35,7 @@ PROCESS(clk,reset)
 BEGIN
 	IF reset = '0' THEN
 		state <= idle;
+		raspi_send <= '0';
 	ELSIF rising_edge(clk) THEN
 		btn_state_1 <= NOT btn_state;
 
@@ -43,10 +44,10 @@ BEGIN
 			IF btn_state_edge = '1' THEN
 				CASE state IS
 					WHEN idle => state <= receiving;
-					WHEN receiving => state <= sending;
-					WHEN sending => state <= showing;
+					WHEN receiving => state <= showing;
 					WHEN showing => state <= solving;
-					WHEN solving => state <= idle;
+					WHEN solving => state <= sending;
+					WHEN sending => state <= idle;
 				END CASE;
 			END IF;
 		ELSE
