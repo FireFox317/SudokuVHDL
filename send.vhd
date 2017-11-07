@@ -16,7 +16,9 @@ ENTITY send IS
 		  
 		spi_write_enable: OUT std_logic;
         spi_data_send: OUT std_logic_vector(7 downto 0);
-        spi_data_request: IN std_logic
+        spi_data_request: IN std_logic;
+
+        sending_done: OUT std_logic
     );		
 END ENTITY send;
 
@@ -71,6 +73,9 @@ BEGIN
 
                     IF y = 9 THEN
                         y := 0;
+                        sending_done <= '1';
+                    ELSE
+                        sending_done <= '0';
                     END IF;
                 END IF;
 
@@ -113,6 +118,9 @@ BEGIN
 
                     IF y = 9 THEN
                         y := 0;
+                        sending_done <= '1';
+                    ELSE
+                        sending_done <= '0';
                     END IF;
                       ELSE
                     i := i + 1;

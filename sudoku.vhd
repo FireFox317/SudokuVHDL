@@ -16,10 +16,15 @@ ENTITY sudoku IS
 
             btn_state: IN std_logic;
             led_state: OUT std_logic_vector(2 downto 0);
+
             sw_debug: IN std_logic;
+            sw_mode: IN std_logic;
+
+            raspi_receive: IN std_logic;
+            raspi_send: OUT std_logic;
 
             sw_location: IN unsigned(7 downto 0);
-            HEX0, HEX1, HEX2: OUT std_logic_vector(6 downto 0)
+            HEX0, HEX1, HEX2, HEX5: OUT std_logic_vector(6 downto 0)
     );		
 END ENTITY sudoku;
 
@@ -39,7 +44,9 @@ ARCHITECTURE bhv of sudoku IS
           
         spi_write_enable: OUT std_logic;
         spi_data_send: OUT std_logic_vector(7 downto 0);
-        spi_data_request: IN std_logic
+        spi_data_request: IN std_logic;
+
+        sending_done: OUT std_logic
     ); 
     END COMPONENT send;
 
@@ -68,7 +75,16 @@ ARCHITECTURE bhv of sudoku IS
             control: OUT std_logic_vector(2 downto 0);
 
             btn_state: IN std_logic;
-            led_state: OUT std_logic_vector(2 downto 0)
+            led_state: OUT std_logic_vector(2 downto 0);
+
+            sw_mode: IN std_logic;
+            raspi_receive : IN std_logic;
+            raspi_send: OUT std_logic;
+
+            HEX5: OUT std_logic_vector(6 downto 0);
+
+            solving_done: IN std_logic;
+            sending_done: IN std_logic
         );     
     END COMPONENT controller;
 
@@ -111,7 +127,9 @@ ARCHITECTURE bhv of sudoku IS
 
             mem_write_address: OUT integer range 0 to 4095;
             mem_write_enable: OUT std_logic;
-            mem_data_in : OUT std_logic_vector(3 downto 0)
+            mem_data_in : OUT std_logic_vector(3 downto 0);
+            
+            solving_done: OUT std_logic
 
             );
     END COMPONENT solving;
@@ -169,6 +187,9 @@ SIGNAL mem_write_enable_wire: std_logic;
 SIGNAL solve_mem_write_enable_wire: std_logic;
 SIGNAL receive_mem_write_enable_wire: std_logic;
 
+SIGNAL solving_done_wire: std_logic;
+SIGNAL sending_done_wire: std_logic;
+
 
 
 
@@ -184,8 +205,9 @@ BEGIN
 
         mem_write_address => solve_mem_write_address_wire,
         mem_write_enable => solve_mem_write_enable_wire,
-        mem_data_in => solve_mem_data_in_wire
+        mem_data_in => solve_mem_data_in_wire,
 
+        solving_done => solving_done_wire
         );   
 
 
@@ -199,7 +221,8 @@ BEGIN
         sw_debug => sw_debug,
         spi_write_enable => spi_write_enable,
         spi_data_send => spi_data_send,
-        spi_data_request => spi_data_request
+        spi_data_request => spi_data_request,
+        sending_done => sending_done_wire
         );
 
 
@@ -219,7 +242,13 @@ BEGIN
         reset => reset,
         control => control_wire,
         btn_state => btn_state,
-        led_state => led_state
+        led_state => led_state,
+        sw_mode => sw_mode,
+        raspi_send => raspi_send,
+        raspi_receive => raspi_receive,
+        HEX5 => HEX5,
+        solving_done => solving_done_wire,
+        sending_done => sending_done_wire
         );
 
     mem: memory PORT MAP(
