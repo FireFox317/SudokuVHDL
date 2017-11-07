@@ -4,8 +4,8 @@ USE IEEE.numeric_std.ALL;
 
 ENTITY solving IS
 	PORT (
-		reset			: IN std_logic;
-		clk 			: IN std_logic;
+		reset           : IN std_logic;
+		clk             : IN std_logic;
 
 		control: IN std_logic_vector(2 downto 0);
 
@@ -27,26 +27,26 @@ ARCHITECTURE bhv of solving IS
 	FUNCTION seg_assign(x,y : integer) return integer IS
 	BEGIN
 		CASE x IS 
-			WHEN 0 to 2 =>	
+			WHEN 0 to 2 =>  
 							CASE y IS 
-								WHEN 0 to 2 =>	return 0;
-								WHEN 3 to 5 =>	return 3;
-								WHEN 6 to 8 =>	return 6;
+								WHEN 0 to 2 =>  return 0;
+								WHEN 3 to 5 =>  return 3;
+								WHEN 6 to 8 =>  return 6;
 								WHEN OTHERS => return 0;
 							END CASE;
-			WHEN 3 to 5 =>	
+			WHEN 3 to 5 =>  
 							CASE y IS 
-								WHEN 0 to 2 =>	return 1;
-								WHEN 3 to 5 =>	return 4;
-								WHEN 6 to 8 =>	return 7;
+								WHEN 0 to 2 =>  return 1;
+								WHEN 3 to 5 =>  return 4;
+								WHEN 6 to 8 =>  return 7;
 								WHEN OTHERS => return 0;
 								
 							END CASE;
-			WHEN 6 to 8 =>		
+			WHEN 6 to 8 =>      
 							CASE y IS 
-								WHEN 0 to 2 =>	return 2;
-								WHEN 3 to 5 =>	return 5;
-								WHEN 6 to 8 =>	return 8;
+								WHEN 0 to 2 =>  return 2;
+								WHEN 3 to 5 =>  return 5;
+								WHEN 6 to 8 =>  return 8;
 								WHEN OTHERS => return 0;
 					
 							END CASE;
@@ -120,6 +120,7 @@ BEGIN
 		--		END LOOP;		
 		--	END LOOP;		
 		--END LOOP;		
+
 		
 		count <= 0;
 
@@ -127,70 +128,69 @@ BEGIN
 
 		IF control = "011" THEN
 
-		IF state = mem_receive THEN
-			solving_done <= '0';
-			IF count = 0 THEN
-				mem_read_address <= address(x,y,0);
-				count <= 1;
-			ELSIF count = 1 THEN
-				
-				count <= 2;
-			ELSIF count = 2 THEN
-				count <= 0;
-				candboard(x,y,0) <= to_integer(unsigned(mem_data_out));
-			END IF;
-
-			IF count = 2 THEN
-				IF x = 8 THEN
-					x := 0;
-					y := y + 1;
-				ELSE
-					x := x + 1;
+			IF state = mem_receive THEN
+				solving_done <= '0';
+				IF count = 0 THEN
+					mem_read_address <= address(x,y,0);
+					count <= 1;
+				ELSIF count = 1 THEN
+					
+					count <= 2;
+				ELSIF count = 2 THEN
+					count <= 0;
+					candboard(x,y,0) <= to_integer(unsigned(mem_data_out));
 				END IF;
 
-				IF y = 9 THEN
-					x := 0;
-					y := 0;
-					state <= init;
-
-				END IF;
-	   END IF;
-
-		ELSIF state = init THEN
-
-			FOR x in 0 to 8 LOOP
-				FOR y in 0 to 8 LOOP
-					candboard(x,y,11) <= seg_assign(x,y);
-
-					IF candboard(x,y,0) = 0 THEN
-						FOR i in 1 to 9 LOOP
-							candboard(x,y,i) <= i;	
-						END LOOP;
-						candboard(x,y,10) <= 9;
+				IF count = 2 THEN
+					IF x = 8 THEN
+						x := 0;
+						y := y + 1;
+					ELSE
+						x := x + 1;
 					END IF;
-		 
+
+					IF y = 9 THEN
+						x := 0;
+						y := 0;
+						state <= init;
+					END IF;
+				END IF;
+
+			ELSIF state = init THEN
+
+				FOR x in 0 to 8 LOOP
+					FOR y in 0 to 8 LOOP
+						candboard(x,y,11) <= seg_assign(x,y);
+
+						IF candboard(x,y,0) = 0 THEN
+							FOR i in 1 to 9 LOOP
+								candboard(x,y,i) <= i;  
+							END LOOP;
+							candboard(x,y,10) <= 9;
+						END IF;
+			 
+					END LOOP;
 				END LOOP;
-			END LOOP;
 
-			state <= update_candidates;
+				state <= update_candidates;
 
-		ELSIF state = update_candidates THEN
+			ELSIF state = update_candidates THEN
 
-		IF upd_can_state = 0 THEN
-			single_found := '0';
-			hidden_single_found := '0';
-			IF x = 8 THEN
-				x := 0;
-				y := y + 1;
-			ELSE
-				x := x + 1;
-			END IF;
+				IF upd_can_state = 0 THEN
+					single_found := '0';
+					hidden_single_found := '0';
+					IF x = 8 THEN
+						x := 0;
+						y := y + 1;
+					ELSE
+						x := x + 1;
+					END IF;
 
-			IF y = 9 THEN
-				x := 0;
-				y := 0;
-				upd_can_state <= 1;
-			END IF;
+					IF y = 9 THEN
+						x := 0;
+						y := 0;
+						upd_can_state <= 1;
+					END IF;
 					IF candboard(x,y,0) /= 0 THEN
 						FOR xc in 0 to 8 LOOP
 							IF candboard(xc,y,0) = 0 THEN
@@ -204,28 +204,24 @@ BEGIN
 						END LOOP;
 						
 					END IF;
-  
-			
+		
+				ELSIF upd_can_state = 1 THEN
 
-		ELSIF upd_can_state = 1 THEN
+					IF x = 8 THEN
+						x := 0;
+						y := y + 1;
+					ELSE
+						x := x + 1;
+					END IF;
 
-		IF x = 8 THEN
-				x := 0;
-				y := y + 1;
-			ELSE
-				x := x + 1;
-			END IF;
-
-			IF y = 9 THEN
-				x := 0;
-				y := 0;
-				upd_can_state <= 2;
-			END IF;
-   --    
+					IF y = 9 THEN
+						x := 0;
+						y := 0;
+						upd_can_state <= 2;
+					END IF;
 					IF candboard(x,y,0) /= 0 THEN
 						FOR yc IN 0 to 8 LOOP -- eliminate in column
 							IF candboard(x,yc,0) = 0 THEN
-
 								IF candboard(x,yc,candboard(x,y,0)) /= 0 THEN
 									candboard(x,yc,10) <= candboard(x,yc,10) - 1;
 									candboard(x,yc,candboard(x,y,0)) <= 0;
@@ -234,69 +230,65 @@ BEGIN
 						END LOOP;
 					END IF;
 
-		ELSIF upd_can_state = 2 THEN
+				ELSIF upd_can_state = 2 THEN
 
-		IF x = 8 THEN
-				x := 0;
-				y := y + 1;
-			ELSE
-				x := x + 1;
-			END IF;
+					IF x = 8 THEN
+						x := 0;
+						y := y + 1;
+					ELSE
+						x := x + 1;
+					END IF;
 
-			IF y = 9 THEN
-				x := 0;
-				y := 0;
-				upd_can_state <= 0;
-				state <= singles;
-			END IF;
+					IF y = 9 THEN
+						x := 0;
+						y := 0;
+						upd_can_state <= 0;
+						state <= singles;
+					END IF;
 
-			IF candboard(x,y,0) /= 0 THEN
-				FOR xc IN 0 to 8 LOOP
-					FOR yc IN 0 to 8 LOOP
-						IF candboard(xc,yc,11) = candboard(x,y,11) THEN
-							IF candboard(xc,yc,candboard(x,y,0)) /= 0 THEN
-								candboard(xc,yc,candboard(x,y,0)) <= 0;
-								candboard(xc,yc,10) <= candboard(xc,yc,10) - 1;
-							END IF;
-							
-						END IF;
-					END LOOP;
-				END LOOP;
-			END IF;
-								
-			
-		END IF;
+					IF candboard(x,y,0) /= 0 THEN
+						FOR xc IN 0 to 8 LOOP
+							FOR yc IN 0 to 8 LOOP
+								IF candboard(xc,yc,11) = candboard(x,y,11) THEN
+									IF candboard(xc,yc,candboard(x,y,0)) /= 0 THEN
+										candboard(xc,yc,candboard(x,y,0)) <= 0;
+										candboard(xc,yc,10) <= candboard(xc,yc,10) - 1;
+									END IF;
+									
+								END IF;
+							END LOOP;
+						END LOOP;
+					END IF;
+				END IF;
 
-			
+			ELSIF state = singles THEN
 
-		ELSIF state = singles THEN
+	          FOR x IN 0 to 8 LOOP -- find singles
+				      FOR y IN 0 to 8 LOOP
+				          IF candboard(x,y,0) = 0 and candboard(x,y,10) = 1 THEN -- unique solution found
+				              FOR I IN 1 to 9 LOOP
+				                  IF candboard(x,y,I) /= 0 THEN
+				                      candboard(x,y,0) <= candboard(x,y,I);
+				                      candboard(x,y,I) <= 0;
+				                      candboard(x,y,10) <= 0;
+				                  END IF;
+				              END LOOP;
+				              single_found := '1';
+				          END IF;
+				      END LOOP;
+				  END LOOP;
 
-   --     	FOR x IN 0 to 8 LOOP -- find singles
-			--		FOR y IN 0 to 8 LOOP
-			--			IF candboard(x,y,0) = 0 and candboard(x,y,10) = 1 THEN -- unique solution found
-			--				FOR I IN 1 to 9 LOOP
-			--					IF candboard(x,y,I) /= 0 THEN
-			--						candboard(x,y,0) <= candboard(x,y,I);
-			--						candboard(x,y,I) <= 0;
-			--						candboard(x,y,10) <= 0;
-			--					END IF;
-			--				END LOOP;
-			--				single_found := '1';
-			--			END IF;
-			--		END LOOP;
-			--	END LOOP;
+				IF single_found = '1' THEN
+		          state <= update_candidates;
+	          ELSE
+	              state <= hidden_singles;
+	          END IF;
 
-			--IF single_found = '1' THEN
-	  --      	state <= update_candidates;
-   --     	ELSE
-   --     		state <= hidden_singles;
-   --     	END IF;
-
-		   state <= hidden_singles;
-	
+				--state <= hidden_singles;
+		
 
 
-		ELSIF state = hidden_singles THEN
+			ELSIF state = hidden_singles THEN
 
 				CASE hid_sig_state IS
 					WHEN 0 => --slv row
@@ -334,37 +326,38 @@ BEGIN
 										END LOOP;
 									END IF;
 					WHEN 2 => --slv seg
-									--IF x = 8 THEN
-									--	x := 0;
-									--	y := y + 1;
-									--ELSE
-									--	x := x + 1;
-									--END IF;
+									IF x = 8 THEN
+									  x := 0;
+									  y := y + 1;
+									ELSE
+									  x := x + 1;
+									END IF;
 
-									--IF y = 9 THEN
-									--	x := 0;
-									--	y := 0;
-										rst_hsa <= '1';
-									--END IF;
+									IF y = 9 THEN
+									  x := 0;
+									  y := 0;
+									eval_hsa <= '1';
+									END IF;
 					
-									--IF candboard(x,y,11) = hid_sig_const THEN
-									--	IF (candboard(x,y,0) = 0 and candboard(x,y,10) /= 0) THEN -- several candidates found
-									--		FOR I IN 1 to 9 LOOP
-									--			IF candboard(x,y,I) /= 0 THEN
-									--				hsa(I,1) <= hsa(I,1) + 1;
-									--				hsa(I,2) <= x;
-									--				hsa(I,3) <= y;
-									--			END IF;
-									--		END LOOP;
-									--	END IF;
-									--END IF;
+									IF candboard(x,y,11) = hid_sig_const THEN
+									  IF (candboard(x,y,0) = 0 and candboard(x,y,10) /= 0) THEN -- several candidates found
+									      FOR I IN 1 to 9 LOOP
+									          IF candboard(x,y,I) /= 0 THEN
+									              hsa(I,1) <= hsa(I,1) + 1;
+									              hsa(I,2) <= x;
+									              hsa(I,3) <= y;
+									          END IF;
+									      END LOOP;
+									  END IF;
+									END IF;
 
-					WHEN 3 => 				
+					WHEN 3 =>               
 								IF hidden_single_found = '0' THEN
 									state <= mem_send;
 								ELSE
 									state <= update_candidates;
 								END IF;
+								hid_sig_state <= 0;
 				END CASE;
 
 				IF eval_hsa = '1' THEN
@@ -387,90 +380,96 @@ BEGIN
 							hsa(a,b) <= 0;
 						END LOOP;
 					END LOOP;
-					IF hid_sig_const = 9 THEN
+					
+
+					state <= update_candidates;
+					upd_can_state <= 0;
+					
+					IF hid_sig_const = 8 THEN
 						hid_sig_const <= 0;
 						hid_sig_state <= hid_sig_state + 1;
 					ELSE
 						hid_sig_const <= hid_sig_const + 1;
 					END IF;
+					
 				END IF;
 
-				state <= mem_send;
+				--state <= mem_send;
 			
 
-		ELSIF state = mem_send THEN
-			mem_write_enable <= '1';
+			ELSIF state = mem_send THEN
+				mem_write_enable <= '1';
 
-			IF count = 0 THEN
-				mem_data_in <= std_logic_vector(to_unsigned(candboard(x,y,i),4));
-				mem_write_address <= address(x,y,i);
-				count <= 1;
-			ELSIF count = 1 THEN
-				count <= 2;
-			ELSE
-				count <= 0;
-			END IF;
-
-			IF count = 2 THEN
-				IF i = 12 THEN
-					i := 0;
-					x := x + 1;
+				IF count = 0 THEN
+					mem_data_in <= std_logic_vector(to_unsigned(candboard(x,y,i),4));
+					mem_write_address <= address(x,y,i);
+					count <= 1;
+				ELSIF count = 1 THEN
+					count <= 2;
 				ELSE
-					i := i + 1;
+					count <= 0;
 				END IF;
 
-				IF x = 9 THEN
-					x := 0;
-					y := y + 1;
+				IF count = 2 THEN
+					IF i = 12 THEN
+						i := 0;
+						x := x + 1;
+					ELSE
+						i := i + 1;
+					END IF;
+
+					IF x = 9 THEN
+						x := 0;
+						y := y + 1;
+					END IF;
+
+					IF y = 9 THEN
+						x := 0;
+						y := 0;
+						i := 0;
+						state <= done;
+						mem_write_enable <= '0';
+					END IF;
 				END IF;
 
-				IF y = 9 THEN
-					x := 0;
-					y := 0;
-					i := 0;
-					state <= done;
-					mem_write_enable <= '0';
-				END IF;
+
+			ELSIF state = done THEN
+				solving_done <= '1';
+				state <= mem_receive;
 			END IF;
-
-
-		ELSIF state = done THEN
-			solving_done <= '1';
-			state <= mem_receive;
-		END IF;
 
 		END IF;
 	   
 
 		--IF control = "011" THEN
 
-		--	IF data_stored = '0' THEN
+		--  IF data_stored = '0' THEN
 				
-		--	ELSE
+		--  ELSE
 
 				
 
-		   -- 	send_data <= '1';
-		--	END IF;
+		   --   send_data <= '1';
+		--  END IF;
 
-		--	IF send_data = '1' THEN
+		--  IF send_data = '1' THEN
 				
 
 		   -- ELSE
-		   -- 	mem_write_enable <= '0';
+		   --   mem_write_enable <= '0';
 
-		--	END IF;
+		--  END IF;
 
 
 			
 			
-			--	IF stage = 0 THEN
-			--		mem_write_enable <= '1';
+			--  IF stage = 0 THEN
+			--      mem_write_enable <= '1';
 
-			--		mem_write_address <= address(x,y,11);
-			   -- 	mem_data_in <= data(seg_assign(x,y));	
+			--      mem_write_address <= address(x,y,11);
+			   --   mem_data_in <= data(seg_assign(x,y));   
 
-			--		IF x = 9 THEN
+			--      IF x = 9 THEN
 		 --               x <= 0;
 		 --               y <= y + 1;
 		 --           ELSE
@@ -487,74 +486,74 @@ BEGIN
 		 --           END IF;
 
 			   -- ELSE
-			   -- 	mem_write_enable <= '1';
+			   --   mem_write_enable <= '1';
 
-			   -- 	IF count /= 2 THEN
-			   -- 		count <= count + 1;
-			   -- 	END IF;
+			   --   IF count /= 2 THEN
+			   --       count <= count + 1;
+			   --   END IF;
 
-			   -- 	IF count = 0 THEN
-			   -- 		mem_read_address <= address(x,y,0);
+			   --   IF count = 0 THEN
+			   --       mem_read_address <= address(x,y,0);
 						
-			   -- 	ELSIF count = 1 THEN
-			   -- 		IF mem_data_out = "0000" THEN
-			   -- 			set_candidates <= '1';
+			   --   ELSIF count = 1 THEN
+			   --       IF mem_data_out = "0000" THEN
+			   --           set_candidates <= '1';
 							
-			   -- 		ELSE
-			   -- 			set_candidates <= '0';
+			   --       ELSE
+			   --           set_candidates <= '0';
 						
-			   -- 		END IF;
-			   -- 	ELSIF count = 3 THEN
-			   -- 		x <= x + 1;
-			   -- 	END IF;
+			   --       END IF;
+			   --   ELSIF count = 3 THEN
+			   --       x <= x + 1;
+			   --   END IF;
 
-			   -- 	IF y < 9 THEN
-			   -- 		IF x < 9 THEN
-			   -- 			IF set_candidates = '1' AND count = 2 THEN
-				  --  			IF i < 11 THEN
-				  --  					IF x = 0 THEN
-				  --  						mem_write_address <= address(8,y,i);
-				  --  					ELSE
-				  --  						mem_write_address <= address(x-1,y,i);
-				  --  					END IF;
+			   --   IF y < 9 THEN
+			   --       IF x < 9 THEN
+			   --           IF set_candidates = '1' AND count = 2 THEN
+				  --            IF i < 11 THEN
+				  --                    IF x = 0 THEN
+				  --                        mem_write_address <= address(8,y,i);
+				  --                    ELSE
+				  --                        mem_write_address <= address(x-1,y,i);
+				  --                    END IF;
 										
-					 --   				IF i = 10 THEN
-						--    				mem_data_in <= data(9);
-						--    			ELSE
-						--    				mem_data_in <= data(i);
-					 --   				END IF;
-					 --   				i <= i + 1;
-				  --  			ELSE
-				  --  				i <= 1;
-				  --  				count <= 3;
-				  --  				set_candidates <= '0';
-				  --  			END IF;
-				  --  		ELSIF set_candidates = '0' AND count = 2 THEN
-				  --  				i <= 1;
+					 --                 IF i = 10 THEN
+						--                  mem_data_in <= data(9);
+						--              ELSE
+						--                  mem_data_in <= data(i);
+					 --                 END IF;
+					 --                 i <= i + 1;
+				  --            ELSE
+				  --                i <= 1;
+				  --                count <= 3;
+				  --                set_candidates <= '0';
+				  --            END IF;
+				  --        ELSIF set_candidates = '0' AND count = 2 THEN
+				  --                i <= 1;
 									
-				  --  				count <= 3;
-				  --  				set_candidates <= '0';
-			   -- 			END IF;
-			   -- 		END IF;
-			   -- 		IF x = 8 AND count = 2 THEN
-			   -- 			x <= 0;
-			   -- 			y <= y + 1;
+				  --                count <= 3;
+				  --                set_candidates <= '0';
+			   --           END IF;
+			   --       END IF;
+			   --       IF x = 8 AND count = 2 THEN
+			   --           x <= 0;
+			   --           y <= y + 1;
 							
-			   -- 			i <= 1;
-			--				count <= 0;
-			--				set_candidates <= '0';
-			   -- 		END IF;
-			   -- 	ELSE
-			   -- 		x <= 0;
-			   -- 		y <= 0;
-			   -- 		first_candidate_initialise <= '1';
-			   -- 		mem_write_enable <= '0';
-			   -- 	END IF;
+			   --           i <= 1;
+			--              count <= 0;
+			--              set_candidates <= '0';
+			   --       END IF;
+			   --   ELSE
+			   --       x <= 0;
+			   --       y <= 0;
+			   --       first_candidate_initialise <= '1';
+			   --       mem_write_enable <= '0';
+			   --   END IF;
 			   -- END IF;
 
 			--ELSE
 
-			--	mem_write_enable <= '0';
+			--  mem_write_enable <= '0';
 		   
 		--END IF;
 	
