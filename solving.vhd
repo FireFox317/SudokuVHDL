@@ -262,28 +262,28 @@ BEGIN
 
 			ELSIF state = singles THEN
 
-	   --       FOR x IN 0 to 8 LOOP -- find singles
-				--      FOR y IN 0 to 8 LOOP
-				--          IF candboard(x,y,0) = 0 and candboard(x,y,10) = 1 THEN -- unique solution found
-				--              FOR I IN 1 to 9 LOOP
-				--                  IF candboard(x,y,I) /= 0 THEN
-				--                      candboard(x,y,0) <= candboard(x,y,I);
-				--                      candboard(x,y,I) <= 0;
-				--                      candboard(x,y,10) <= 0;
-				--                  END IF;
-				--              END LOOP;
-				--              single_found := '1';
-				--          END IF;
-				--      END LOOP;
-				--  END LOOP;
+			  FOR x IN 0 to 8 LOOP -- find singles
+					  FOR y IN 0 to 8 LOOP
+						  IF candboard(x,y,0) = 0 and candboard(x,y,10) = 1 THEN -- unique solution found
+							  FOR I IN 1 to 9 LOOP
+								  IF candboard(x,y,I) /= 0 THEN
+									  candboard(x,y,0) <= candboard(x,y,I);
+									  candboard(x,y,I) <= 0;
+									  candboard(x,y,10) <= 0;
+								  END IF;
+							  END LOOP;
+							  single_found := '1';
+						  END IF;
+					  END LOOP;
+				  END LOOP;
 
-				--IF single_found = '1' THEN
-		  --        state <= update_candidates;
-	   --       ELSE
-	   --           state <= hidden_singles;
-	   --       END IF;
+				IF single_found = '1' THEN
+				  state <= update_candidates;
+			  ELSE
+				  state <= hidden_singles;
+			  END IF;
 
-				state <= hidden_singles;
+				--state <= hidden_singles;
 		
 
 
@@ -325,31 +325,31 @@ BEGIN
 										END LOOP;
 									END IF;
 					WHEN 2 => --slv seg
-									--IF x = 8 THEN
-									--  x := 0;
-									--  y := y + 1;
-									--ELSE
-									--  x := x + 1;
-									--END IF;
+									IF x = 8 THEN
+										x := 0;
+										y := y + 1;
+									ELSE
+										x := x + 1;
+									END IF;
 
-									--IF y = 9 THEN
-									 -- x := 0;
-									 -- y := 0;
-									--eval_hsa = '1';
-										rst_hsa <= '1';
-									--END IF;
+									IF y = 9 THEN
+										x := 0;
+										y := 0;
+										eval_hsa = '1';
+										--rst_hsa <= '1';
+									END IF;
 					
-									--IF candboard(x,y,11) = hid_sig_const THEN
-									--  IF (candboard(x,y,0) = 0 and candboard(x,y,10) /= 0) THEN -- several candidates found
-									--      FOR I IN 1 to 9 LOOP
-									--          IF candboard(x,y,I) /= 0 THEN
-									--              hsa(I,1) <= hsa(I,1) + 1;
-									--              hsa(I,2) <= x;
-									--              hsa(I,3) <= y;
-									--          END IF;
-									--      END LOOP;
-									--  END IF;
-									--END IF;
+									IF candboard(x,y,11) = hid_sig_const THEN
+										IF (candboard(x,y,0) = 0 and candboard(x,y,10) /= 0) THEN -- several candidates found
+											FOR I IN 1 to 9 LOOP
+												IF candboard(x,y,I) /= 0 THEN
+													hsa(I,1) <= hsa(I,1) + 1;
+													hsa(I,2) <= x;
+													hsa(I,3) <= y;
+												END IF;
+											END LOOP;
+										END IF;
+									END IF;
 
 					WHEN 3 =>               
 								IF hidden_single_found = '0' THEN
@@ -357,6 +357,8 @@ BEGIN
 								ELSE
 									state <= update_candidates;
 								END IF;
+								hid_sig_state <= 0;
+								hid_sig_const <= 0;
 				END CASE;
 
 				IF eval_hsa = '1' THEN
@@ -379,16 +381,18 @@ BEGIN
 							hsa(a,b) <= 0;
 						END LOOP;
 					END LOOP;
-					IF hid_sig_const = 9 THEN
+					IF hidden_single_found = '1' THEN
+						state <= update_candidates;
+						upd_can_state <= 0;
 						hid_sig_const <= 0;
-						IF hidden_single_found = '1' THEN
-							state <= update_candidates;
-							upd_can_state <= 0;
-						ELSE
-							hid_sig_state <= hid_sig_state + 1;
-						END IF;
+						hid_sig_state <= 0;
 					ELSE
-						hid_sig_const <= hid_sig_const + 1;
+						IF hid_sig_const = 8 THEN
+							hid_sig_const <= 0;
+							hid_sig_state <= hid_sig_state + 1;
+						ELSE
+							hid_sig_const <= hid_sig_const + 1;
+						END IF;
 					END IF;
 				END IF;
 
