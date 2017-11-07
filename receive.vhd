@@ -33,16 +33,16 @@ BEGIN
 			stage <= '0';
 			
 
-			if rising_edge(clk) THEN
-				if count = 4096 THEN
-					count := 0;
-				ELSE
-					count := count + 1;
-				END IF;
-			END IF;
+			--if rising_edge(clk) THEN
+			--	if count = 4096 THEN
+			--		count := 0;
+			--	ELSE
+			--		count := count + 1;
+			--	END IF;
+			--END IF;
 			
-			mem_write_address <= count;
-			mem_data_in <= "0000";
+			--mem_write_address <= count;
+			--mem_data_in <= "0000";
 
 		ELSIF rising_edge(clk) THEN
 			spi_data_valid_1 <= spi_data_valid;

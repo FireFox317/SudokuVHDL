@@ -107,19 +107,19 @@ BEGIN
 		y := 0;
 		i := 0;
 
-		FOR a in 1 to 9 LOOP
-			FOR b in 1 to 3 LOOP
-				hsa(a,b) <= 0;
-			END LOOP;
-		END LOOP;
+		--FOR a in 1 to 9 LOOP
+		--	FOR b in 1 to 3 LOOP
+		--		hsa(a,b) <= 0;
+		--	END LOOP;
+		--END LOOP;
 
-		FOR x in 0 to 8 LOOP
-			FOR y in 0 to 8 LOOP
-				FOR i in 0 to 11 LOOP
-					candboard(x,y,i) <= 0;
-				END LOOP;		
-			END LOOP;		
-		END LOOP;		
+		--FOR x in 0 to 8 LOOP
+		--	FOR y in 0 to 8 LOOP
+		--		FOR i in 0 to 11 LOOP
+		--			candboard(x,y,i) <= 0;
+		--		END LOOP;		
+		--	END LOOP;		
+		--END LOOP;		
 		
 		count <= 0;
 
@@ -395,7 +395,7 @@ BEGIN
 					END IF;
 				END IF;
 
-				--state <= mem_send;
+				state <= mem_send;
 			
 
 		ELSIF state = mem_send THEN
