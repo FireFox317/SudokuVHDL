@@ -263,6 +263,7 @@ BEGIN
 
 			ELSIF state = singles THEN
 
+
 	          FOR x IN 0 to 8 LOOP -- find singles
 				      FOR y IN 0 to 8 LOOP
 				          IF candboard(x,y,0) = 0 and candboard(x,y,10) = 1 THEN -- unique solution found
@@ -283,9 +284,6 @@ BEGIN
 	          ELSE
 	              state <= hidden_singles;
 	          END IF;
-
-				--state <= hidden_singles;
-		
 
 
 			ELSIF state = hidden_singles THEN
@@ -379,8 +377,7 @@ BEGIN
 						FOR b in 1 to 3 LOOP
 							hsa(a,b) <= 0;
 						END LOOP;
-					END LOOP;
-					
+					END LOOP;				
 
 					state <= update_candidates;
 					upd_can_state <= 0;
@@ -440,122 +437,6 @@ BEGIN
 
 		END IF;
 	   
-
-		--IF control = "011" THEN
-
-		--  IF data_stored = '0' THEN
-				
-		--  ELSE
-
-				
-
-		   --   send_data <= '1';
-		--  END IF;
-
-		--  IF send_data = '1' THEN
-				
-
-		   -- ELSE
-		   --   mem_write_enable <= '0';
-
-		--  END IF;
-
-
-			
-			
-			--  IF stage = 0 THEN
-			--      mem_write_enable <= '1';
-
-			--      mem_write_address <= address(x,y,11);
-			   --   mem_data_in <= data(seg_assign(x,y));   
-
-			--      IF x = 9 THEN
-		 --               x <= 0;
-		 --               y <= y + 1;
-		 --           ELSE
-		 --               x <= x + 1;
-		 --           END IF;
-
-		 --           IF y = 9 THEN
-		 --               y <= 0;
-		 --               x <= 0;
-		 --               i <= 1;
-		 --               value <= "1111";
-		 --               stage <= 1;
-		 --               mem_write_enable <= '0';
-		 --           END IF;
-
-			   -- ELSE
-			   --   mem_write_enable <= '1';
-
-			   --   IF count /= 2 THEN
-			   --       count <= count + 1;
-			   --   END IF;
-
-			   --   IF count = 0 THEN
-			   --       mem_read_address <= address(x,y,0);
-						
-			   --   ELSIF count = 1 THEN
-			   --       IF mem_data_out = "0000" THEN
-			   --           set_candidates <= '1';
-							
-			   --       ELSE
-			   --           set_candidates <= '0';
-						
-			   --       END IF;
-			   --   ELSIF count = 3 THEN
-			   --       x <= x + 1;
-			   --   END IF;
-
-			   --   IF y < 9 THEN
-			   --       IF x < 9 THEN
-			   --           IF set_candidates = '1' AND count = 2 THEN
-				  --            IF i < 11 THEN
-				  --                    IF x = 0 THEN
-				  --                        mem_write_address <= address(8,y,i);
-				  --                    ELSE
-				  --                        mem_write_address <= address(x-1,y,i);
-				  --                    END IF;
-										
-					 --                 IF i = 10 THEN
-						--                  mem_data_in <= data(9);
-						--              ELSE
-						--                  mem_data_in <= data(i);
-					 --                 END IF;
-					 --                 i <= i + 1;
-				  --            ELSE
-				  --                i <= 1;
-				  --                count <= 3;
-				  --                set_candidates <= '0';
-				  --            END IF;
-				  --        ELSIF set_candidates = '0' AND count = 2 THEN
-				  --                i <= 1;
-									
-				  --                count <= 3;
-				  --                set_candidates <= '0';
-			   --           END IF;
-			   --       END IF;
-			   --       IF x = 8 AND count = 2 THEN
-			   --           x <= 0;
-			   --           y <= y + 1;
-							
-			   --           i <= 1;
-			--              count <= 0;
-			--              set_candidates <= '0';
-			   --       END IF;
-			   --   ELSE
-			   --       x <= 0;
-			   --       y <= 0;
-			   --       first_candidate_initialise <= '1';
-			   --       mem_write_enable <= '0';
-			   --   END IF;
-			   -- END IF;
-
-			--ELSE
-
-			--  mem_write_enable <= '0';
-		   
-		--END IF;
 	
 	END IF;
 END PROCESS;
