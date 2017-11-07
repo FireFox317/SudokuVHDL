@@ -326,7 +326,7 @@ BEGIN
 				END CASE;
 
 				IF eval_hsa = '1' THEN
-					eval_hsa = '0';
+					eval_hsa <= '0';
 					FOR I IN 1 to 9 LOOP
 						IF hsa(I,1) = 1 THEN
 							candboard(hsa(I,2),hsa(I,3),0) <= hsa(I,1);
@@ -339,18 +339,17 @@ BEGIN
 				END IF;
 
 				IF rst_hsa = '1' THEN
-					rst_hsa = '0';
+					rst_hsa <= '0';
 					FOR a in 1 to 9 LOOP
 						FOR b in 1 to 3 LOOP
 							hsa(a,b) <= 0;
 						END LOOP;
 					END LOOP;
-					rst_hsa <= '1';
 					IF hid_sig_const = 9 THEN
-						hid_sig_const <= hid_sig_const + 1;
+						hid_sig_const <= 0;
 						hid_sig_state <= hid_sig_state + 1;
 					ELSE
-						hid_sig_const = hid_sig_const + 1;
+						hid_sig_const <= hid_sig_const + 1;
 					END IF;
 				END IF;
 
