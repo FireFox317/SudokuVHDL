@@ -43,6 +43,7 @@ BEGIN
         y := 0;
         i := 0;
         stage <= '0';
+        sending_done <= '0';
 	ELSIF rising_edge(clk) THEN
        spi_data_request_1 <= spi_data_request;
 
@@ -73,6 +74,8 @@ BEGIN
 
                     IF y = 9 THEN
                         y := 0;
+                        x := 0;
+                        i := 0;
                         sending_done <= '1';
                     ELSE
                         sending_done <= '0';

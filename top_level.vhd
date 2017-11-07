@@ -4,7 +4,8 @@ USE IEEE.numeric_std.ALL;
 
 ENTITY top_level IS
   PORT (
-        reset: IN std_logic;
+        reset_btn: IN std_logic;
+        reset_rpi: IN std_logic;
         clk : IN std_logic;
 
         sclk : IN std_logic;
@@ -30,7 +31,8 @@ ARCHITECTURE bhv of top_level IS
     COMPONENT sudoku IS
   PORT (
             clk: IN std_logic;
-            reset: IN std_logic;
+            reset_btn: IN std_logic;
+            reset_rpi: IN std_logic;
 
             spi_data_receive: IN std_logic_vector(7 downto 0);
             spi_data_valid: IN std_logic;
@@ -91,7 +93,8 @@ BEGIN
 
     sud: sudoku PORT MAP(
         clk => clk,
-        reset => reset,
+        reset_btn => reset_btn,
+        reset_rpi => reset_rpi,
 
         spi_data_receive => spi_data_receive_wire,
         spi_data_send => spi_data_send_wire,

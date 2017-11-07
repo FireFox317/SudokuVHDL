@@ -18,7 +18,8 @@ ENTITY controller IS
         HEX5: OUT std_logic_vector(6 downto 0);
 
         solving_done: IN std_logic;
-        sending_done: IN std_logic
+        sending_done: IN std_logic;
+        clear_done: IN std_logic
     );		
 END ENTITY controller;
 
@@ -26,7 +27,7 @@ ARCHITECTURE bhv of controller IS
 	SIGNAL btn_state_edge: std_logic;
 	SIGNAL btn_state_1: std_logic;
 
-	TYPE states IS (idle, receiving, sending, showing, solving);
+	TYPE states IS (idle, receiving, sending, showing, solving, clear_memory);
 	SIGNAL state: states := receiving;
 
 BEGIN
@@ -47,7 +48,8 @@ BEGIN
 					WHEN receiving => state <= showing;
 					WHEN showing => state <= solving;
 					WHEN solving => state <= sending;
-					WHEN sending => state <= idle;
+					WHEN sending => state <= clear_memory;
+					WHEN clear_memory => state <= idle;
 				END CASE;
 			END IF;
 		ELSE
@@ -67,6 +69,10 @@ BEGIN
 						END IF;
 				WHEN sending => 
 						IF sending_done = '1' THEN
+							state <= clear_memory;
+						END IF;
+				WHEN clear_memory =>
+						IF clear_done = '1' THEN
 							state <= idle;
 						END IF;
 				WHEN showing => state <= idle;
@@ -80,6 +86,7 @@ BEGIN
 			WHEN sending => control <= "010"; led_state <= "010"; raspi_send <= '1';
 			WHEN showing => control <= "100"; led_state <= "100"; raspi_send <= '0';
 			WHEN solving => control <= "011"; led_state <= "011"; raspi_send <= '0';
+			WHEN clear_memory => control <= "111"; led_state <= "111"; raspi_send <= '0';
 		END CASE;
 	END IF;
 
